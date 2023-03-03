@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { FirebaseService } from "../services/FirebaseService";
+import { Account } from "../types/firebaseTypes";
 const firebaseService = FirebaseService.init();
 class UserController {
   private constructor() {}
@@ -10,11 +11,17 @@ class UserController {
   }
   async Login(req: Request, res: Response) {
     try {
-      const data = {
+      const account = {
         ...req.body,
       };
-      const isCorrect = await firebaseService.authentication(data);
-      if (isCorrect) return res.send({ message: "Login complete" });
+      console.log(req.body);
+
+      const isCorrect = await firebaseService.authentication(account);
+      console.log(isCorrect);
+
+      if (isCorrect) {
+        return res.send({ message: "Login complete" });
+      }
       return res.send({ message: "Login failed" });
     } catch (err) {
       console.log("Error: ", err);

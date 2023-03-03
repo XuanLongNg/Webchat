@@ -1,0 +1,24 @@
+{
+  "name": "webchat",
+  "version": "1.0.0",
+  "description": "1. Create-react-app",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon -r ts-node backend/src/app.ts",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/XuanLongNg/Webchat.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/XuanLongNg/Webchat/issues"
+  },
+  "homepage": "https://github.com/XuanLongNg/Webchat#readme",
+  "dependencies": {
+    "nodemon": "^2.0.21",
+    "ts-node": "^10.9.1"
+  }
+}

@@ -3,8 +3,6 @@ const app = express();
 
 const dotenv = require("dotenv");
 dotenv.config();
-import path from "path";
-import http from "http";
 
 import * as bodyParser from "body-parser";
 app.use(bodyParser.json());
@@ -16,10 +14,14 @@ const upload = multer();
 
 import appRouter from "./routes";
 import AppConfig from "./configs/appConfig";
-// const dotenv = require("dotenv");
-// const __dirname = path.resolve();
 
+import * as path from "path";
+const __dirname = path.resolve();
+app.use(express.static(path.join(__dirname, "/frontend/build")));
 app.use("/api", appRouter);
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "/frontend/build/index.html"));
+});
 const POST = AppConfig.getEnv("POST") || 4000;
 
 app.listen(3000, () => {
