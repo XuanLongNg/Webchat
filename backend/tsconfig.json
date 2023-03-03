@@ -1,0 +1,9 @@
+{
+    "compilerOptions": {
+        "skipDefaultLibCheck":true,
+        "module": "CommonJS",
+        "forceConsistentCasingInFileNames": true,
+        "allowSyntheticDefaultImports": true,
+        "resolveJsonModule":true,
+    }
+}

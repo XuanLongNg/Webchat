@@ -2,7 +2,7 @@ export const data = {
   user: {
     u1: {
       id: "u1",
-      name: "Xuân Long ạhhdjkađạkadhadhjahjdahdaghdghjđâhđạ",
+      name: "Đoán xem ạhhdjkađạkadhadhjahjdahdaghdghjđâhđạ",
       avatar:
         "https://i0.wp.com/salt.tikicdn.com/cache/w1200/ts/product/6e/8e/24/a253072a098918e947099fb5683f0401.jpg",
       boxs: [
