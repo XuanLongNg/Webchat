@@ -10,7 +10,6 @@ export default class Hashing {
   }
   public async compare(plaintext: string, textDB: string): Promise<boolean> {
     const result = await bcrypt.compare(plaintext, textDB);
-    console.log(result);
     return result;
   }
 }

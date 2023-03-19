@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Button, Checkbox, Form, Input } from "antd";
 import Style from "./style";
 import axios from "axios";
-import { redirect } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 interface LoginFormData {
   username: string;
   password: string;
@@ -10,7 +10,6 @@ interface LoginFormData {
 const Login = () => {
   const [isLogin, SetIsLogin] = useState(false);
   const onFinish = (values: any) => {
-    console.log("Success:", values);
     const data: LoginFormData = {
       username: values.username,
       password: values.password,
@@ -20,7 +19,8 @@ const Login = () => {
       .post("/api/user/login", data)
       .then((response) => {
         const message = response.data.message;
-        if (message == "Login complete") {
+        // console.log(message);
+        if (message === "Login complete") {
           SetIsLogin(true);
           return;
         } else {
@@ -37,7 +37,9 @@ const Login = () => {
     // console.log("Failed:", errorInfo);
   };
 
-  return (
+  return isLogin ? (
+    <Navigate to="/" />
+  ) : (
     <Style>
       <div>
         <Form

@@ -2,7 +2,7 @@ export interface Account {
   id: string;
   username: string;
   password: string;
-  infomation: {
+  information: {
     fname: string;
     lname: string;
     dob: string;

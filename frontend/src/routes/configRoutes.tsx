@@ -15,7 +15,6 @@ export const ConfigRoutes: ConfigRoute[] = [
     element: <Homepage />,
     path: AppRoutes.HOME,
     index: true,
-    layout: MainLayout,
   },
   {
     element: <Login />,
