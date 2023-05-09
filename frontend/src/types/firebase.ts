@@ -6,7 +6,7 @@ export interface infoBoxChat {
 export interface userProfile {
   id: string;
   username: string;
-  informations: {
+  information: {
     address: string;
     dob: string;
     fname: string;
@@ -14,4 +14,9 @@ export interface userProfile {
     image: string;
     introduce: string;
   };
+}
+export interface message {
+  sender: string;
+  body: string;
+  time: string;
 }

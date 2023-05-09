@@ -2,20 +2,16 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { Navigate, useParams } from "react-router-dom";
 import MainLayout from "../../layouts/MainLayout/MainLayout";
-import { URL_SERVER } from "../../constant";
 
-const Homepage = () => {
+const Message = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  const { url } = useParams<{ url: string }>();
+  // const { message } = useParams<{ message: string }>();
   const checkLogin = () => {
     setIsLoading(true);
-    console.log(document.cookie);
-    const url_api = URL_SERVER + "/api/user";
     axios
-      .post(url_api, { id: document.cookie })
+      .get("api/user")
       .then((response) => {
-        console.log(response.data.message);
         if (response.data.message === "logged") {
           setIsLoggedIn(true);
         } else {
@@ -34,12 +30,8 @@ const Homepage = () => {
   if (isLoading) {
     return <div>Loading...</div>;
   }
-  return (
-    <div>
-      {!isLoggedIn ? <Navigate to="/login" /> : <MainLayout />}
-      {/* <MainLayout /> */}
-    </div>
-  );
+
+  return <div>{!isLoggedIn ? <Navigate to="/login" /> : <MainLayout />}</div>;
 };
 
-export default Homepage;
+export default Message;

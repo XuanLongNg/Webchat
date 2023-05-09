@@ -3,7 +3,8 @@ export class AppRoutes {
   static NOT_FOUND = "/404";
   static LOG_IN = "/login";
   static COMING_SOON = "/coming-soon";
-  static URL = "/url/:url";
+  static URL = "/:url";
+  static MESSAGE = "/message/:message";
   /**
    * It checks if the route is an error route.
    * @param {string} route - The route to check

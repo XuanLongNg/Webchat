@@ -53,7 +53,7 @@ export const MessageStyled = styled.div`
   height: 80vh;
   width: 100%;
   padding: 0 5%;
-  background-color: ${colors.text_with_orange};
+  background-color: ${colors.white};
 `;
 export const SendMessageStyled = styled.div`
   align-items: center;

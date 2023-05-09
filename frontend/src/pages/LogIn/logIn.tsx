@@ -3,6 +3,7 @@ import { Button, Checkbox, Form, Input } from "antd";
 import Style from "./style";
 import axios from "axios";
 import { Navigate } from "react-router-dom";
+import { URL_SERVER } from "../../constant";
 interface LoginFormData {
   username: string;
   password: string;
@@ -14,13 +15,16 @@ const Login = () => {
       username: values.username,
       password: values.password,
     };
-
+    const url_api = URL_SERVER + "/api/user/login";
     axios
-      .post("/api/user/login", data)
+      .post(url_api, data)
       .then((response) => {
         const message = response.data.message;
-        // console.log(message);
+        console.log(message);
         if (message === "Login complete") {
+          document.cookie = response.data.id;
+          console.log(document.cookie);
+
           SetIsLogin(true);
           return;
         } else {

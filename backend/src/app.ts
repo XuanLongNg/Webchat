@@ -37,13 +37,34 @@ app.use(
 import appRouter from "./routes";
 import AppConfig from "./configs/appConfig";
 
+import * as http from "http";
+// import { Server } from "socket.io";
+import * as cors from "cors";
+
+const corsOptions: cors.CorsOptions = {
+  origin: "http://localhost:3000",
+  methods: "GET,HEAD,OPTIONS,PUT,PATCH,POST,DELETE",
+};
+app.use(cors(corsOptions));
+
+const server = http.createServer(app);
+
+// io.on("connection", (socket) => {
+//   console.log("A user " + socket.id + " connected");
+//   socket.on("chat message", (msg: string) => {
+//     console.log("Received message:", msg);
+//   });
+//   socket.on("disconnect", () => {
+//     console.log("A user disconnected");
+//   });
+// });
 app.use(express.static(path.join(__dirname, "/frontend/build")));
 app.use("/api", appRouter);
 app.get("*", (req, res) => {
+  // res.send({ message: "Hello" });
   res.sendFile(path.join(__dirname, "/frontend/build/index.html"));
 });
-const POST = AppConfig.getEnv("POST") || 4000;
 
-app.listen(3000, () => {
-  console.log("server run http://localhost:3000");
+app.listen(4000, () => {
+  console.log("server run http://localhost:4000");
 });

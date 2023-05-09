@@ -6,7 +6,7 @@ const firebaseService = FirebaseService.init();
 
 declare module "express-session" {
   interface SessionData {
-    user: Account;
+    user: string;
   }
 }
 class UserController {
@@ -17,7 +17,9 @@ class UserController {
     return controller;
   }
   async isLogin(req: Request, res: Response, next) {
-    if (req.session.user) {
+    // console.log(req.body.id, req.session.user);
+
+    if (req.session.user === req.body.id) {
       return res.send({ message: "logged" });
     } else {
       return res.send({ message: "not logged in" });
@@ -30,9 +32,11 @@ class UserController {
       };
       const isCorrect = await firebaseService.authentication(account);
       if (isCorrect) {
-        req.session.user = await firebaseService.getUser(account);
+        const user = await firebaseService.getUserByUsername(account);
+        req.session.user = user.id;
+        // console.log(req.session.user);
         // console.log(req.session.user, req.session.user.id);
-        return res.send({ message: "Login complete" });
+        return res.send({ message: "Login complete", id: req.session.user });
       }
       return res.send({ message: "Login failed" });
     } catch (err) {
@@ -46,6 +50,7 @@ class UserController {
         ...req.body,
       };
       const hasUser = await firebaseService.hasUser(account);
+
       if (hasUser) {
         return res.send({ message: "User exits", data: account });
       } else {
@@ -58,41 +63,74 @@ class UserController {
     }
   }
   async getProfile(req: Request, res: Response) {
-    if (req.session.user == undefined)
+    console.log(req.body.id);
+
+    const user = await firebaseService.getProfileById(req.body.id);
+    if (user === undefined)
       return res.status(404).send({ message: "not logged in" });
-    return res.send(req.session.user);
+    return res.send(user);
   }
   async getListChats(req: Request, res: Response) {
     try {
       if (req.session.user == undefined)
         return res.status(404).send({ message: "not logged in" });
-      const id = req.session.user.id;
+      const id = req.session.user;
       const listChats = await firebaseService.getListBoxChat(id);
-      let keys = Object.keys(listChats);
-      let arr = [];
-      for (let i in keys) {
-        arr.push(listChats[keys[i]]);
-      }
-      return res.send(arr);
+      return res.send(listChats);
     } catch (err) {
       console.log("Error: ", err);
       res.status(404).send({ message: "Server internal error" });
     }
   }
   async getInfoBoxChat(req: Request, res: Response) {
+    // console.log(req);
     try {
-      const data = {
-        ...req.body,
-      };
-      const info = await firebaseService.getInfoBoxChat(
-        data.id,
-        req.session.user.id
-      );
+      // console.log(req.body.id);
+      const info = await firebaseService.getInfoBoxChat(req.body.id);
       if (info) return res.send(info);
       return res.status(403).send({ message: "Box chat doesn't exits" });
     } catch (err) {
       console.log("Error: ", err);
       return res.status(404).send({ message: "Server internal error" });
+    }
+  }
+  async sendMessage(req: Request, res: Response) {
+    try {
+      const data = {
+        ...req.body,
+      };
+      const isSended = firebaseService.sendMessage(data);
+      if (isSended) {
+        return res.status(200).send({ message: "sended" });
+      } else {
+        return res.status(200).send({ message: "rejected" });
+      }
+    } catch (err) {
+      console.log("Error: ", err);
+      return res.status(404).send({ message: "Server internal error" });
+    }
+  }
+  async getMessage(req: Request, res: Response) {
+    try {
+      const data = {
+        ...req.body,
+      };
+      const message = await firebaseService.getMessage(data.id);
+      return res.status(200).send({ message: message });
+    } catch (err) {
+      console.log(err);
+    }
+  }
+  async addFriend(req: Request, res: Response) {
+    try {
+      const data = {
+        ...req.body,
+      };
+      const result = await firebaseService.addFriend(data);
+      if (result) return res.status(200).send({ result: "complete" });
+      return res.status(200).send({ result: "rejected" });
+    } catch (error) {
+      console.log(error);
     }
   }
 }

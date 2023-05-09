@@ -1,61 +1,63 @@
-import React, { useState } from "react";
-import { data } from "../../../database/data";
+import React, { useState, useEffect } from "react";
 import Style, { StyleUtilities, StyleBoxChat } from "./style";
 import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import "../../../styles/scrollbar/index.css";
-import ListChat from "../../../database/ListChat";
+import listChat from "../../../database/ListChat";
 import { infoBoxChat } from "../../../types/firebase";
-import { useEffect } from "react";
-const listChat = new ListChat();
-const ChatBox = () => {
-  const [isLoading, setIsLoading] = useState(true);
-  const [boxs, setBoxs] = useState<infoBoxChat[]>([]);
-  useEffect(() => {
-    async function getListChat() {
-      const result = await listChat.getListChats();
-      setBoxs(result);
-      setIsLoading(false);
-    }
-    getListChat();
-  }, []);
+import { useParams, Route, Navigate } from "react-router-dom";
+const ChatBox = (box: infoBoxChat) => {
+  const nav = "/" + box.id;
+  const html = (
+    <a href={nav}>
+      <div className="box-chat-item d-flex flex-row">
+        <img className="img" src={box.image} alt="" />
+        <div>
+          <h3 className="name">{box.name}</h3>
+          <p className="body">Hello</p>
+        </div>
+      </div>
+    </a>
+  );
+
+  return html;
+};
+
+const ListChatBox = (boxs: infoBoxChat[]) => {
   const com = (
     <StyleBoxChat className="box-chat scroll-bar">
-      {boxs.map((box) => {
-        return (
-          <div className="box-chat-item d-flex flex-row">
-            <img className="img" src={box.image} alt="" />
-            <div>
-              <h3 className="name">{box.name}</h3>
-              <p className="body">Hello</p>
-            </div>
-          </div>
-        );
+      {boxs.map((box: infoBoxChat) => {
+        return ChatBox(box);
       })}
     </StyleBoxChat>
   );
-  if (isLoading) return <p>Loading</p>;
   return com;
 };
-const ChatChannel = () => {
+
+const Utilities = () => {
+  return (
+    <StyleUtilities className="d-flex flex-row util utilities">
+      <div className="input-group search">
+        <input
+          className="form-control bi bi-search"
+          type="text"
+          placeholder=" Search"
+        />
+      </div>
+      <button className="find-user-btn">
+        <i className="bi bi-person-fill-add"></i>
+      </button>
+      <button className="find-gr-btn">
+        <i className="bi bi-people-fill"></i>
+      </button>
+    </StyleUtilities>
+  );
+};
+
+const ChatChannel = (props: any) => {
   return (
     <Style className="chat-channel">
-      <StyleUtilities className="d-flex flex-row util utilities">
-        <div className="input-group search">
-          <input
-            className="form-control bi bi-search"
-            type="text"
-            placeholder=" Search"
-          />
-        </div>
-        <button className="find-user-btn">
-          <i className="bi bi-person-fill-add"></i>
-        </button>
-        <button className="find-gr-btn">
-          <i className="bi bi-people-fill"></i>
-        </button>
-      </StyleUtilities>
-      {ChatBox()}
+      {Utilities()},{ListChatBox(props.boxs)}
     </Style>
   );
 };
