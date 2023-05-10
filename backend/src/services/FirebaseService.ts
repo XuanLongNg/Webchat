@@ -45,39 +45,20 @@ export class FirebaseService {
     return undefined;
   }
   public async hasUser(account: Account): Promise<boolean> {
-    const username = account.username;
-    const dbRef = this.database
-      .ref("/account")
-      .orderByChild("username")
-      .equalTo(username);
-    const data = await dbRef.once("value");
-    if (data.exists()) return true;
+    const data = await this.findData("username", account.username, "/account/");
+    if (data) return true;
     return false;
   }
-  public async getUrlById({
-    key,
-    id,
-    url,
-  }: {
-    key: string;
-    id: string;
-    url: string;
-  }) {
+  public async getUrlById(key: string, id: string, url: string) {
     let data = await this.findData(key, id, url);
     return url + Object.keys(data)[0];
   }
   public async getUserByUsername(
     account: Account
   ): Promise<undefined | Account> {
-    const username = account.username;
-    const dbRef = this.database
-      .ref("/account")
-      .orderByChild("username")
-      .equalTo(username);
-    const data = await dbRef.once("value");
-
-    if (data.exists()) {
-      const dataDetail = data.val()[Object.keys(data.val())[0]];
+    const data = await this.findData("username", account.username, "/account/");
+    if (data) {
+      const dataDetail = data[Object.keys(data)[0]];
       const id = dataDetail["id"],
         information = dataDetail["information"],
         username = dataDetail["username"],
@@ -107,13 +88,23 @@ export class FirebaseService {
     const data = await this.findData("id", idUser, url);
   }
   public async createBoxChat({ id1, id2, nameId1, nameId2 }) {
-    let url = "";
     const numberOfGrs = (await this.getNumber("/messages/number")) + 1;
     const numberOfGrInfo =
       (await this.getNumber("/groupChatsInfomation/number")) + 1;
     const colGr = "gr" + numberOfGrs;
     const colGrInfo = "gr" + numberOfGrInfo;
+    const grChat = this.database.ref("/groupChats");
+    let key = "id",
+      id = id1,
+      url = "/groupChats";
+    let urlUser1 = await this.getUrlById(key, id, url);
+    id = id2;
+    let urlUser2 = await this.getUrlById(key, id, url);
+    // const numberOfBoxChatU1 = (await this.getNumber());
+    console.log(urlUser1, urlUser2);
 
+    const grChatInfo = this.database.ref("/groupChatsInfomation");
+    const message = this.database.ref("/messages");
     const idGr = uuid();
     const grChatInfoInit = {
       [colGrInfo]: {
@@ -138,6 +129,12 @@ export class FirebaseService {
         },
       },
     };
+    //await message.update(messageInit); // update messages
+    // await message.update({ number: numberOfGrs }); // update numberOfGrs
+    // await grChatInfo.update(grChatInfoInit); // update grChatInfoInit
+    // await grChatInfo.update({ number: numberOfGrInfo }); // update numberOfGrInfo
+    // await this.database.ref(urlUser1).update() // adding box id in box chat user 1
+    // await this.database.ref(urlUser2).update() // adding box id in box chat user 1
   }
   public async addUser(account: Account): Promise<void> {
     const url = "/account";
@@ -176,6 +173,7 @@ export class FirebaseService {
         id: id,
         boxchat: {
           b1: idGr,
+          number: 1,
         },
       },
     };
@@ -198,27 +196,26 @@ export class FirebaseService {
         },
       },
     };
-    await grChat.update(grChatInit); // update boxchat
-    await message.update(messageInit); // update messages
-    await grChatInfo.update(grChatInfoInit); // update grChatInfoInit
-    await message.update({ number: numberOfGrs });
-    await dbRef.update({ number: numberOfUsers }); // update number of accounts
-    await grChatInfo.update({ number: numberOfGrInfo });
     await dbRef.update(information); // update profile
+    await dbRef.update({ number: numberOfUsers }); // update number of accounts
+    await grChat.update(grChatInit); // update boxchat
+    await grChatInfo.update(grChatInfoInit); // update grChatInfoInit
+    await grChatInfo.update({ number: numberOfGrInfo });
+    await message.update(messageInit); // update messages
+    await message.update({ number: numberOfGrs }); // update numberOfGrs
   }
   public async getListBoxChat(id: string): Promise<string[]> {
-    let dbRef = this.database
-      .ref("/groupChats/")
-      .orderByChild("id")
-      .equalTo(id);
-    let data = await dbRef.once("value");
-    let keys = Object.keys(data.val());
-    dbRef = this.database.ref("/groupChats/" + keys[0] + "/boxchat/");
-    data = await dbRef.once("value");
-    keys = Object.keys(data.val());
+    let url = await this.getUrlById();
+    let data = await this.findData("id", id, "/groupChats/");
     let arr = [];
-    for (let i in keys) {
-      arr.push(data.val()[keys[i]]);
+    if (data) {
+      let keys = Object.keys(data);
+      const dbRef = this.database.ref("/groupChats/" + keys[0] + "/boxchat/");
+      const data = await dbRef.once("value");
+      keys = Object.keys(data.val());
+      for (let i in keys) {
+        arr.push(data.val()[keys[i]]);
+      }
     }
     return arr;
   }
