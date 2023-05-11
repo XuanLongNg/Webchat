@@ -239,7 +239,7 @@ export class FirebaseService {
   }
   public async getNameOrUser(id: string) {
     let url = "/account/";
-    let data = await this.getUrlById("id", id, url);
+    let data = await this.findData("id", id, url);
     let name =
       data[Object.keys(data)[0]].information.fname +
       " " +
@@ -254,16 +254,20 @@ export class FirebaseService {
     this.createBoxChat(id, idFriend, nameUser1, nameUser2);
     return true;
   }
+  public async addUserOnGroup(id, idGr) {
+    const url = await this.getUrlById("id", idGr, "/groupChatsInfomation/");
+    console.log(url);
+  }
   public async createGroup(data) {
     let arr = [];
     let keys = Object.keys(data);
     for (let i in keys) {
       arr.push(data[keys[i]]);
     }
-    let url = "/account/";
     let nameUser1 = await this.getNameOrUser(arr[0]);
     let nameUser2 = await this.getNameOrUser(arr[1]);
     const id = await this.createBoxChat(arr[0], arr[1], nameUser1, nameUser2);
+    await this.addUserOnGroup("", id);
     for (let i = 2; i < arr.length; i++) {
       await this.addBoxChatInUser(id, arr[i]);
     }

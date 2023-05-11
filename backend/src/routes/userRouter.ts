@@ -13,4 +13,6 @@ userRouter.post("/getProfile", userController.getProfile);
 userRouter.post("/sendMessage", userController.sendMessage);
 userRouter.post("/getMessage", userController.getMessage);
 userRouter.post("/addFriend", userController.addFriend);
+userRouter.post("/newGroup", userController.createGroup);
+
 export default userRouter;

@@ -133,6 +133,19 @@ class UserController {
       console.log(error);
     }
   }
+  async createGroup(req: Request, res: Response) {
+    try {
+      const data = {
+        ...req.body,
+      };
+      const result = await firebaseService.createGroup(data);
+      // if (result)
+      return res.status(200).send({ result: "complete" });
+      // return res.status(200).send({ result: "rejected" });
+    } catch (error) {
+      console.log(error);
+    }
+  }
 }
 
 export default UserController;
