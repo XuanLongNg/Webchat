@@ -146,6 +146,7 @@ export class FirebaseService {
     if (id1 != id2) {
       await this.addBoxChatInUser(idGr, id2);
     }
+    return idGr;
   }
   public async addUser(account: Account): Promise<void> {
     const url = "/account";
@@ -236,21 +237,36 @@ export class FirebaseService {
     }
     return undefined;
   }
+  public async getNameOrUser(id: string) {
+    let url = "/account/";
+    let data = await this.getUrlById("id", id, url);
+    let name =
+      data[Object.keys(data)[0]].information.fname +
+      " " +
+      data[Object.keys(data)[0]].information.lname;
+    return name;
+  }
+
   public async addFriend({ id, idFriend }: { id: string; idFriend: string }) {
-    let url = "/groupChats/";
-    let urlUser1 = "/account/";
-    let dataUser1 = await this.findData("id", id, urlUser1);
-    let nameUser1 =
-      dataUser1[Object.keys(dataUser1)[0]].information.fname +
-      " " +
-      dataUser1[Object.keys(dataUser1)[0]].information.lname;
-    let urlUser2 = "/account/";
-    let dataUser2 = await this.findData("id", idFriend, urlUser2);
-    let nameUser2 =
-      dataUser2[Object.keys(dataUser2)[0]].information.fname +
-      " " +
-      dataUser2[Object.keys(dataUser2)[0]].information.lname;
+    let url = "/account/";
+    let nameUser1 = await this.getNameOrUser(id);
+    let nameUser2 = await this.getNameOrUser(idFriend);
     this.createBoxChat(id, idFriend, nameUser1, nameUser2);
     return true;
+  }
+  public async createGroup(data) {
+    let arr = [];
+    let keys = Object.keys(data);
+    for (let i in keys) {
+      arr.push(data[keys[i]]);
+    }
+    let url = "/account/";
+    let nameUser1 = await this.getNameOrUser(arr[0]);
+    let nameUser2 = await this.getNameOrUser(arr[1]);
+    const id = await this.createBoxChat(arr[0], arr[1], nameUser1, nameUser2);
+    for (let i = 2; i < arr.length; i++) {
+      await this.addBoxChatInUser(id, arr[i]);
+    }
+    return id;
   }
 }
