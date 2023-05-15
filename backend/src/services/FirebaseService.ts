@@ -131,6 +131,7 @@ export class FirebaseService {
             time: new Date().toString(),
             user: "System",
           },
+          number: 1,
         },
       },
     };
@@ -202,7 +203,8 @@ export class FirebaseService {
   }
   public async getInfoBoxChat(id: string) {
     const data = await this.findData("id", id, "/groupChatsInfomation/");
-    return data[Object.keys(data)[0]];
+    if (data) return data[Object.keys(data)[0]];
+    return data;
   }
   public async getProfileById(id: string): Promise<undefined | Account> {
     const data = await this.findData("id", id, "/account");
@@ -216,7 +218,7 @@ export class FirebaseService {
     let url = "/messages/";
     const key = "id";
     const id = data.id;
-    url = this.getUrlById(key, id, url) + "/message/";
+    url = (await this.getUrlById(key, id, url)) + "/message/";
     const number = (await this.getNumber(url + "number")) + 1;
     const idMes = "m" + number;
     const message = {
@@ -233,7 +235,14 @@ export class FirebaseService {
   public async getMessage(id: string) {
     const data = await this.findData("id", id, "/messages/");
     if (data) {
-      return data[Object.keys(data)[0]];
+      let tmp = data[Object.keys(data)[0]].message;
+      let arr = [];
+      let keys = Object.keys(tmp);
+      for (let i of keys) {
+        arr.push(tmp[i]);
+      }
+      arr.pop();
+      return arr;
     }
     return undefined;
   }
@@ -255,7 +264,9 @@ export class FirebaseService {
     return true;
   }
   public async addUserOnGroup(id, idGr) {
-    const url = await this.getUrlById("id", idGr, "/groupChatsInfomation/");
+    const url =
+      (await this.getUrlById("id", idGr, "/groupChatsInfomation/")) + "member";
+
     console.log(url);
   }
   public async createGroup(data) {

@@ -6,7 +6,7 @@ import { userProfile } from "../../../types/firebase";
 import { useState, useEffect } from "react";
 const UserArea = (props: any) => {
   const [profile, setProfile] = useState<userProfile>(props.user);
-  console.log(props.user);
+  // console.log(props.user);
 
   return (
     <Style>

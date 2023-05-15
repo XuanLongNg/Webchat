@@ -3,9 +3,10 @@ import Style, { HeaderStyled, MessageStyled, SendMessageStyled } from "./style";
 import "bootstrap-icons/font/bootstrap-icons.css";
 // import { data } from "../../../database/data";
 import { useParams } from "react-router-dom";
-import ListChat from "../../../database/ListChat";
 import { infoBoxChat, message } from "../../../types/firebase";
-const listChat = new ListChat();
+import { Button, Form, Input } from "antd";
+import Client from "../../../database/client";
+const client = new Client();
 const Header = (props: any) => {
   const [isLoading, setIsLoading] = useState(true);
   const [id, setId] = useState(props.id);
@@ -13,7 +14,7 @@ const Header = (props: any) => {
   useEffect(() => {
     async function get() {
       try {
-        const tmp = await listChat.getInfoBoxChat(id);
+        const tmp = await client.getInfoBoxChat(id);
         setData(tmp);
         setIsLoading(false);
       } catch (err) {
@@ -58,42 +59,38 @@ const Header = (props: any) => {
   );
 };
 const Messages = (props: any) => {
-  const messages: any = [
-    {
-      sender: "hdhada",
-      recipient: "dândnan",
-      body: "Hello World",
-      time: "dâdad",
-    },
-    {
-      sender: "hdhad",
-      recipient: "dândnan",
-      body: "Lo cc",
-      time: "dâdad",
-    },
-    {
-      sender: "hdhada",
-      recipient: "dândnan",
-      body: "đaad",
-      time: "dâdad",
-    },
-  ];
+  const [isLoading, setIsLoading] = useState(true);
+  const [id, setId] = useState(props.id);
+  const [data, setData] = useState<message[]>([]);
+  useEffect(() => {
+    async function get() {
+      try {
+        const tmp = await client.getMessage(id);
+        setData(tmp);
+        setIsLoading(false);
+      } catch (err) {
+        console.log("Error: " + err);
+        throw err;
+      }
+    }
+    get();
+  }, []);
   // const messages: any = ws.getMessage(props.sender, props.recipient);
-  const id = props.sender;
+  const idUser = props.sender;
   return (
     <MessageStyled>
       <div>
-        {messages.map((message: any) => {
-          if (message.sender === id) {
+        {data.map((message: any) => {
+          if (message.user === idUser) {
             return (
               <div>
-                {message.sender} {message.body}
+                {message.user} {message.body}
               </div>
             );
           } else {
             return (
               <div>
-                {message.recipient} {message.body}
+                {message.user} {message.body}
               </div>
             );
           }
@@ -103,19 +100,40 @@ const Messages = (props: any) => {
   );
 };
 const SendMessage = () => {
+  const onFinish = (values: any) => {
+    console.log("Success:", values);
+  };
+
+  const onFinishFailed = (errorInfo: any) => {
+    console.log("Failed:", errorInfo);
+  };
   return (
-    <SendMessageStyled>
-      <div className="input-group mb-3">
-        <button
-          className="btn btn-outline-secondary"
-          type="submit"
-          id="button-addon1"
-        >
-          Send Message
-        </button>
-        <input type="text" className="form-control" placeholder="" />
-      </div>
-    </SendMessageStyled>
+    // <SendMessageStyled>
+    <Form
+      name="basic"
+      labelCol={{ span: 8 }}
+      wrapperCol={{ span: 16 }}
+      style={{ maxWidth: 600 }}
+      initialValues={{ remember: true }}
+      onFinish={onFinish}
+      onFinishFailed={onFinishFailed}
+      autoComplete="off"
+      layout="inline"
+    >
+      <Form.Item
+        name="username"
+        rules={[{ required: true, message: "Please input your username!" }]}
+      >
+        <Input />
+      </Form.Item>
+
+      <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
+        <Button type="primary" htmlType="submit">
+          Submit
+        </Button>
+      </Form.Item>
+    </Form>
+    // </SendMessageStyled>
   );
 };
 const ChatArea = (props: any) => {

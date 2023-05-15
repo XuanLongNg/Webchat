@@ -8,7 +8,7 @@ export const StyleUtilities = styled(Utilities)`
   width: 100%;
   padding: 0 5%;
   .search {
-    font: 
+    /* font:  */
     width: 70%;
     btn {
       background-color: ${colors.white};

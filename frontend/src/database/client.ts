@@ -1,10 +1,12 @@
 import axios from "axios";
-import { infoBoxChat } from "../types/firebase";
+import { infoBoxChat, message } from "../types/firebase";
 import { URL_SERVER } from "../constant";
-class ListChat {
+class Client {
   public listChat: string[];
+  public message: message[];
   public constructor() {
     this.listChat = [];
+    this.message = [];
   }
 
   public async getListChats(): Promise<string[]> {
@@ -18,13 +20,19 @@ class ListChat {
     const data = {
       id: id,
     };
+    console.log(data);
     const url_api = URL_SERVER + "/api/user/getInfoBoxChat";
-    let response = await axios.post(url_api, data, {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    let response = await axios.post(url_api, data);
+    return response.data;
+  }
+
+  public async getMessage(id: string) {
+    const data = {
+      id: id,
+    };
+    const url_api = URL_SERVER + "/api/user/getInfoBoxChat";
+    let response = await axios.post(url_api, data);
     return response.data;
   }
 }
-export default ListChat;
+export default Client;

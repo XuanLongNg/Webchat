@@ -60,13 +60,13 @@ export const SendMessageStyled = styled.div`
   height: 10vh;
   width: 100%;
   padding: 0 5%;
-  background-color: ${colors.text_with_greyish};
+  background-color: ${colors.black_blue_color};
 `;
 const Style = styled.div`
   //   position: absolute;
   left: 0;
   top: 0;
-  background-color: ${colors.white};
+  background-color: ${colors.black_blue_color};
   width: 100%;
   height: 100%;
 `;

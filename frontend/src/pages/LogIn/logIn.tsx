@@ -42,7 +42,7 @@ const Login = () => {
   };
 
   return isLogin ? (
-    <Navigate to="/" />
+    <Navigate to="/message" />
   ) : (
     <Style>
       <div>

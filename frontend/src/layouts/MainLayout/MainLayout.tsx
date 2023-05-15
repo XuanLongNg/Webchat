@@ -6,10 +6,10 @@ import Style from "./style";
 import react, { useState, useEffect } from "react";
 import User from "../../database/User";
 import { infoBoxChat, userProfile } from "../../types/firebase";
-import listChat from "../../database/ListChat";
+import Client from "../../database/client";
 import { Navigate } from "react-router-dom";
 const user = new User();
-const ListChat = new listChat();
+const client = new Client();
 
 const MainLayout: React.FC<LayoutProps> = ({ children }) => {
   const [profile, setProfile] = useState<userProfile>(user.user);
@@ -19,13 +19,16 @@ const MainLayout: React.FC<LayoutProps> = ({ children }) => {
   useEffect(() => {
     async function getListChat() {
       try {
-        const result = await ListChat.getListChats();
+        const result = await client.getListChats();
         let arrtmp: infoBoxChat[] = [];
         for (let i of result) {
-          const tmp: infoBoxChat = await ListChat.getInfoBoxChat(i);
+          // console.log(i);
+          const tmp: infoBoxChat = await client.getInfoBoxChat(i);
           arrtmp.push(tmp);
         }
         setBoxs(arrtmp);
+        // for (let i in boxs) console.log(i);
+
         setIsLoading(false);
       } catch (err) {
         console.log("Error: " + err);
@@ -41,8 +44,8 @@ const MainLayout: React.FC<LayoutProps> = ({ children }) => {
     getListChat();
   }, []);
   if (isLoading) return <div>Loading...</div>;
-  const url = "/message/" + boxs[0].id;
-  console.log(url);
+  // const url = "/message/" + boxs[0].id;
+  // console.log(url);
 
   return (
     <Style className="d-flex">
@@ -52,7 +55,7 @@ const MainLayout: React.FC<LayoutProps> = ({ children }) => {
         <UserArea user={profile} />
       </div>
       <div id="chat-area" className="flex-grow-1">
-        <ChatArea sender={profile.id} url={boxs[0].id} />
+        <ChatArea sender={profile.id} url={"#1"} />
       </div>
     </Style>
   );

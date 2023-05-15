@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { FirebaseService } from "../services/FirebaseService";
-import { Account } from "../types/firebaseTypes";
+import { Account, message } from "../types/firebaseTypes";
 import * as session from "express-session";
 const firebaseService = FirebaseService.init();
 
@@ -17,8 +17,6 @@ class UserController {
     return controller;
   }
   async isLogin(req: Request, res: Response, next) {
-    // console.log(req.body.id, req.session.user);
-
     if (req.session.user === req.body.id) {
       return res.send({ message: "logged" });
     } else {
@@ -34,8 +32,6 @@ class UserController {
       if (isCorrect) {
         const user = await firebaseService.getUserByUsername(account);
         req.session.user = user.id;
-        // console.log(req.session.user);
-        // console.log(req.session.user, req.session.user.id);
         return res.send({ message: "Login complete", id: req.session.user });
       }
       return res.send({ message: "Login failed" });
@@ -63,7 +59,7 @@ class UserController {
     }
   }
   async getProfile(req: Request, res: Response) {
-    console.log(req.body.id);
+    // console.log(req.body.id);
 
     const user = await firebaseService.getProfileById(req.body.id);
     if (user === undefined)
@@ -83,11 +79,17 @@ class UserController {
     }
   }
   async getInfoBoxChat(req: Request, res: Response) {
-    // console.log(req);
     try {
-      // console.log(req.body.id);
+      console.log(req.body.id);
       const info = await firebaseService.getInfoBoxChat(req.body.id);
       if (info) return res.send(info);
+      // if (1)
+      //   return res
+      //     .status(200)
+      //     .send([
+      //       "c1a3c8de54444d88b3f1d2652892b045",
+      //       "87c24315436d435fbc6792389e374c8a",
+      //     ]);
       return res.status(403).send({ message: "Box chat doesn't exits" });
     } catch (err) {
       console.log("Error: ", err);
@@ -115,8 +117,10 @@ class UserController {
       const data = {
         ...req.body,
       };
-      const message = await firebaseService.getMessage(data.id);
-      return res.status(200).send({ message: message });
+      let message = await firebaseService.getMessage(data.id);
+      console.log(message);
+
+      return res.status(200).send(message);
     } catch (err) {
       console.log(err);
     }
