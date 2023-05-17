@@ -60,13 +60,16 @@ const Header = (props: any) => {
 };
 const Messages = (props: any) => {
   const [isLoading, setIsLoading] = useState(true);
-  const [id, setId] = useState(props.id);
+  const [id, setId] = useState(props.recipient);
   const [data, setData] = useState<message[]>([]);
   useEffect(() => {
     async function get() {
       try {
         const tmp = await client.getMessage(id);
+        const tmp1 = await client.getMessageClient(id);
         setData(tmp);
+        console.log(tmp);
+
         setIsLoading(false);
       } catch (err) {
         console.log("Error: " + err);
@@ -77,6 +80,8 @@ const Messages = (props: any) => {
   }, []);
   // const messages: any = ws.getMessage(props.sender, props.recipient);
   const idUser = props.sender;
+  if (isLoading) return <p>Loading</p>;
+
   return (
     <MessageStyled>
       <div>
@@ -99,8 +104,21 @@ const Messages = (props: any) => {
     </MessageStyled>
   );
 };
-const SendMessage = () => {
+const SendMessage = (props: any) => {
+  console.log("Message", props);
+
   const onFinish = (values: any) => {
+    const data: message = {
+      sender: props.sender,
+      time: new Date().toString(),
+      body: values.message,
+    };
+    console.log(data);
+
+    client
+      .sendMessage(props.recipient, data)
+      .then()
+      .catch((err) => console.log(err));
     console.log("Success:", values);
   };
 
@@ -121,8 +139,8 @@ const SendMessage = () => {
       layout="inline"
     >
       <Form.Item
-        name="username"
-        rules={[{ required: true, message: "Please input your username!" }]}
+        name="message"
+        rules={[{ required: true, message: "Enter your message!" }]}
       >
         <Input />
       </Form.Item>
@@ -142,8 +160,8 @@ const ChatArea = (props: any) => {
   return (
     <Style>
       <Header id={url} />
-      <Messages sender={props.id} recipient={url} />
-      <SendMessage />
+      <Messages sender={props.sender} recipient={url} />
+      <SendMessage sender={props.sender} recipient={url} />
     </Style>
   );
 };

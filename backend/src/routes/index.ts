@@ -1,13 +1,7 @@
 import * as express from "express";
 import userRouter from "./userRouter";
+import system from "./systemRoutes";
 const appRouter = express.Router();
-const requireLogin = (req, res, next) => {
-  if (req.session.user) {
-    next();
-  } else {
-    res.redirect("/login");
-  }
-};
 appRouter.use("/user", userRouter);
-// appRouter.use("*",)
+appRouter.use("/system", system);
 export default appRouter;

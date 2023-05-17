@@ -1,5 +1,3 @@
-import AOS from "aos";
-import "aos/dist/aos.css";
 import { useRoutes } from "react-router";
 import { ConfigRoutes } from "./routes/configRoutes";
 // import 'slick-carousel/slick/slick-theme.css';
@@ -8,7 +6,6 @@ import "antd/dist/reset.css";
 
 function App() {
   //  ** animation initialization
-  AOS.init();
   const convertRoutes = ConfigRoutes.map((route) => {
     const { layout, element: elementRoute } = route;
 

@@ -20,3 +20,71 @@ export interface message {
   body: string;
   time: string;
 }
+export interface Account {
+  id: string;
+  username: string;
+  password: string;
+  information: {
+    fname: string;
+    lname: string;
+    dob: string;
+    address: string;
+    introduce: string;
+    image: string;
+  };
+}
+export interface Message {
+  id: string;
+  message: {
+    [key: string]: {
+      time: string;
+      body: string;
+      user: string;
+    };
+  };
+}
+export interface GroupChat {
+  id: string;
+  boxchat: {
+    [key: string]: string;
+  };
+}
+export interface GroupChatsInfomation {
+  id: string;
+  image: string;
+  name: string;
+}
+export interface Friend {
+  id: string;
+  listFriends: {
+    [key: string]: string;
+    number: string;
+  };
+}
+export interface MainStructure {
+  account: {
+    [key: string]: Account;
+  };
+  friend: {
+    [key: string]: Friend;
+  };
+  groupChats: {
+    [key: string]: GroupChatsInfomation;
+  };
+  groupChatsInfomation: {
+    [key: string]: GroupChatsInfomation;
+  };
+  messages: {
+    [key: string]: Message;
+  };
+}
+export interface keyFirebase {
+  DB_API_KEY: string;
+  DB_AUTH_DOMAIN: string;
+  DB_DATABASE_URL: string;
+  DB_PROJECT_ID: string;
+  DB_APP_ID: string;
+  DB_MEASUREMENT_ID: string;
+  DB_MESSAGE_SENDER: string;
+  DB_STORAGE_BUCKET: string;
+}

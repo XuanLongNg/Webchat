@@ -157,6 +157,8 @@ export class FirebaseService {
     const id = "#" + numberOfUsers;
     const dbRef = this.database.ref(url);
     const grChat = this.database.ref("/groupChats");
+    const friend = this.database.ref("/friend");
+
     const information = {
       [colUser]: {
         id: id,
@@ -180,9 +182,18 @@ export class FirebaseService {
         },
       },
     };
+    const friendInit = {
+      [colUser]: {
+        id: id,
+        listFriends: {
+          number: 0,
+        },
+      },
+    };
     await dbRef.update(information); // update profile
     await dbRef.update({ number: numberOfUsers }); // update number of accounts
     await grChat.update(grChatInit); // update boxchat
+    await friend.update(friendInit); // update friend
     await this.createBoxChat(
       id,
       id,
@@ -225,7 +236,7 @@ export class FirebaseService {
       [idMes]: {
         user: data.user,
         time: data.time,
-        bode: data.body,
+        body: data.body,
       },
     };
     await this.database.ref(url).update(message); //update message
@@ -234,6 +245,7 @@ export class FirebaseService {
   }
   public async getMessage(id: string) {
     const data = await this.findData("id", id, "/messages/");
+
     if (data) {
       let tmp = data[Object.keys(data)[0]].message;
       let arr = [];
@@ -255,9 +267,36 @@ export class FirebaseService {
       data[Object.keys(data)[0]].information.lname;
     return name;
   }
-
+  public async hasFriend({ id, idFriend }: { id: string; idFriend: string }) {
+    const url = (await this.getUrlById("id", id, "/friend/")) + "/listFriends/";
+    const result = await this.database.ref(url).once("value");
+    const keys = Object.keys(result);
+    for (let i of keys) if (result[i] == idFriend) return true;
+    return false;
+  }
   public async addFriend({ id, idFriend }: { id: string; idFriend: string }) {
-    let url = "/account/";
+    let urlUser1 =
+      (await this.getUrlById("id", id, "/friend/")) + "/listFriends";
+    let urlUser2 =
+      (await this.getUrlById("id", idFriend, "/friend/")) + "/listFriends";
+    const numberOfFriendsUser1 =
+      (await this.getNumber(urlUser1 + "/number")) + 1;
+    const numberOfFriendsUser2 =
+      (await this.getNumber(urlUser2 + "/number")) + 1;
+    const dataUser1 = {
+      ["friend" + numberOfFriendsUser1]: idFriend,
+      number: numberOfFriendsUser1,
+    };
+    const dataUser2 = {
+      ["friend" + numberOfFriendsUser2]: id,
+      number: numberOfFriendsUser2,
+    };
+    console.log(urlUser1, urlUser2);
+    console.log(numberOfFriendsUser1, numberOfFriendsUser2);
+    const friend1 = this.database.ref(urlUser1);
+    await friend1.update(dataUser1); // update friend 1
+    const friend2 = this.database.ref(urlUser2);
+    await friend2.update(dataUser2); // update friend 2
     let nameUser1 = await this.getNameOrUser(id);
     let nameUser2 = await this.getNameOrUser(idFriend);
     this.createBoxChat(id, idFriend, nameUser1, nameUser2);

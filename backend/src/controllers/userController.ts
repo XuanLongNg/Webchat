@@ -120,7 +120,8 @@ class UserController {
       let message = await firebaseService.getMessage(data.id);
       console.log(message);
 
-      return res.status(200).send(message);
+      if (message) return res.status(200).send(message);
+      return res.status(403).send({ message: "Box chat doesn't exits" });
     } catch (err) {
       console.log(err);
     }
