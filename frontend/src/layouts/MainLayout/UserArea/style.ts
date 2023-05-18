@@ -2,7 +2,7 @@ import styled from "styled-components";
 import colors from "../../../styles/color/index";
 export default styled.div`
   height: 10vh;
-  background-color: ${colors.orange};
+  background-color: ${colors.black_blue_color};
   min-width: 16em;
   box-sizing: border-box;
   // position: absolute;
@@ -11,7 +11,7 @@ export default styled.div`
   .box-chat-item {
     width: 100%;
     align-items: center;
-    color: ${colors.text_with_orange};
+    color: ${colors.white};
     .img {
       width: 3em;
       height: 3em;
@@ -42,7 +42,7 @@ export default styled.div`
       display: flex;
       right: 0;
       border: none;
-      background-color: ${colors.orange};
+      background-color: ${colors.black_blue_color};
       animation-name: zoomOut;
       animation-duration: 0.5s;
       animation-fill-mode: backwards;

@@ -151,6 +151,18 @@ class UserController {
       console.log(error);
     }
   }
+  async getSmallInformation(req: Request, res: Response) {
+    try {
+      const data = {
+        ...req.body,
+      };
+      const result = await firebaseService.getSmallInformation(data.id);
+      return res.status(200).send(result);
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
+  }
 }
 
 export default UserController;

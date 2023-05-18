@@ -1,124 +1,19 @@
-import React, { useState, useEffect } from "react";
-import Style, { HeaderStyled, MessageStyled, SendMessageStyled } from "./style";
+import React, { useEffect, useState } from "react";
+import Style from "./style";
 import "bootstrap-icons/font/bootstrap-icons.css";
-// import { data } from "../../../database/data";
 import { useParams } from "react-router-dom";
 import { infoBoxChat, message } from "../../../types/firebase";
 import { Button, Form, Input } from "antd";
 import Client from "../../../database/client";
 import FirebaseConfig from "../../../configs/firebaseConfig";
-import { onValue, ref } from "firebase/database";
+import Body from "./components/body/Body";
+import Header from "./components/header/Header";
+import axios from "axios";
 const firebaseConfig = new FirebaseConfig();
 const client = new Client();
-const Header = (props: any) => {
-  const [isLoading, setIsLoading] = useState(true);
-  const [id, setId] = useState(props.id);
-  const [data, setData] = useState<infoBoxChat>();
-  useEffect(() => {
-    async function get() {
-      try {
-        const tmp = await client.getInfoBoxChat(id);
-        setData(tmp);
-        setIsLoading(false);
-      } catch (err) {
-        console.log("Error: " + err);
-        throw err;
-      }
-    }
-    get();
-  }, []);
-  // const [onclick, SetOnClick] = useState(false);
-  const [onDisplaySearchBar, SetOnDisplaySearchBar] = useState(false);
-  if (isLoading) return <p>Loading</p>;
 
-  return (
-    <HeaderStyled>
-      <div className="box-chat-item d-flex">
-        <img className="img" src={data?.image} alt="" />
-        <div className="flex-grow-1 info-user">
-          <h3 className="name">{data?.name}</h3>
-          <p className="body">#{data?.id}</p>
-        </div>
-        <div className="input-group search">
-          <input
-            // style={{ display: `${onDisplaySearchBar ? "block" : "none"}` }}
-            type="text"
-            className="form-control"
-          />
-          <button
-            className="search-btn btn btn-outline-secondary"
-            onClick={() => {
-              SetOnDisplaySearchBar(true);
-            }}
-          >
-            <i className="bi bi-search"></i>
-          </button>
-        </div>
-        <button className="setting-btn">
-          <i className="bi bi-exclamation-circle-fill"></i>
-        </button>
-      </div>
-    </HeaderStyled>
-  );
-};
-const Messages = (props: any) => {
-  const [isLoading, setIsLoading] = useState(true);
-  const [id, setId] = useState(props.recipient);
-  const [data, setData] = useState<message[]>([]);
-  useEffect(() => {
-    async function get() {
-      try {
-        const db = firebaseConfig.getDatabase();
-        const url =
-          (await firebaseConfig.getUrlByKey("id", id, "/messages")) +
-          "/message";
-        const starCountRef = ref(db, url);
-        onValue(starCountRef, (snapshot) => {
-          const data = snapshot.val();
-          console.log(data);
-          const arr = [];
-          const keys = Object.keys(data);
-          for (let i of keys) {
-            arr.push(data[i]);
-          }
-          arr.pop();
-          setData(arr);
-        });
-        setIsLoading(false);
-      } catch (err) {
-        console.log("Error: " + err);
-        throw err;
-      }
-    }
-    get();
-  }, []);
-  const idUser = props.sender;
-  if (isLoading) return <p>Loading</p>;
-
-  return (
-    <MessageStyled>
-      <div>
-        {data.map((message: any) => {
-          if (message.user === idUser) {
-            return (
-              <div>
-                {message.user} {message.body}
-              </div>
-            );
-          } else {
-            return (
-              <div>
-                {message.user} {message.body}
-              </div>
-            );
-          }
-        })}
-      </div>
-    </MessageStyled>
-  );
-};
 const SendMessage = (props: any) => {
-  console.log("Message", props);
+  // console.log("Message", props);
 
   const onFinish = (values: any) => {
     const data: message = {
@@ -126,13 +21,13 @@ const SendMessage = (props: any) => {
       time: new Date().toString(),
       body: values.message,
     };
-    console.log(data);
+    // console.log(data);
 
     client
       .sendMessage(props.recipient, data)
       .then()
       .catch((err) => console.log(err));
-    console.log("Success:", values);
+    // console.log("Success:", values);
   };
 
   const onFinishFailed = (errorInfo: any) => {
@@ -167,13 +62,67 @@ const SendMessage = (props: any) => {
     // </SendMessageStyled>
   );
 };
+const BASE_URL = "http://localhost:4000";
+
 const ChatArea = (props: any) => {
   const { url } = useParams<{ url: string }>();
+  const checkUrl = (box: infoBoxChat) => {
+    return box.id == url;
+  };
+  console.log("Boxs: ", props.boxs);
+  console.log("Box: ", props.boxs.find(checkUrl));
 
+  let box = props.boxs.find(checkUrl);
+  const tmpData = {
+    image: "",
+    name: "unknown",
+    member: {},
+  };
+  box = box == undefined ? tmpData : box;
+  console.log("Char area: ", box);
+  const [idMember, setIdMember] = useState(box.member);
+  const [dataMember, setDataMember] = useState();
+
+  useEffect(() => {
+    async function getInfoMembers() {
+      try {
+        const arr: any = [];
+        const keys = Object.keys(idMember);
+        console.log("Box: ", box);
+
+        console.log("Id member", idMember);
+
+        console.log("Keys", keys);
+
+        for (let i of keys) {
+          const response = await axios.post(
+            BASE_URL + "/api/user/getSmallInformation",
+            { id: idMember[i] }
+          );
+          console.log("response: ", response);
+
+          arr.push(response.data);
+        }
+        console.log("Arrays: ", arr);
+
+        setDataMember(arr);
+      } catch (err) {
+        console.log(err);
+        throw err;
+      }
+    }
+    getInfoMembers();
+  });
   return (
     <Style>
-      <Header id={url} />
-      <Messages sender={props.sender} recipient={url} />
+      <Header id={url} client={client} box={box} />
+      <Body
+        firebaseConfig={firebaseConfig}
+        sender={props.sender}
+        recipient={url}
+        box={box}
+        dataMember={dataMember}
+      />
       <SendMessage sender={props.sender} recipient={url} />
     </Style>
   );

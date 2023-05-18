@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import Style, { StyleUtilities, StyleBoxChat } from "./style";
+import Style, { StyleUtilities } from "./style";
 import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import "../../../styles/scrollbar/index.css";
@@ -7,34 +7,18 @@ import Client from "../../../database/client";
 import { infoBoxChat } from "../../../types/firebase";
 import { useParams, Route, Navigate } from "react-router-dom";
 import { Divider, List, Typography } from "antd";
+import ChatBox from "./components/ChatBox";
 
-const ChatBox = (box: infoBoxChat) => {
-  const nav = "/" + box.id;
-  const html = (
-    <a href={nav}>
-      <div className="box-chat-item d-flex flex-row">
-        {/* <img className="img" src={box.image} alt="" /> */}
-        <div>
-          <h3 className="name">{box.name}</h3>
-          <p className="body">Hello</p>
-        </div>
-      </div>
-    </a>
-  );
-
-  return html;
-};
-
-const ListChatBox = (boxs: infoBoxChat[]) => {
-  const com = (
-    <StyleBoxChat className="box-chat scroll-bar">
-      {boxs.map((box: infoBoxChat) => {
-        return ChatBox(box);
-      })}
-    </StyleBoxChat>
-  );
-  return com;
-};
+// const ListChatBox = (boxs: infoBoxChat[]) => {
+//   const com = (
+//     <StyleBoxChat className="box-chat scroll-bar">
+//       {boxs.map((box: infoBoxChat) => {
+//         return ChatBox(box);
+//       })}
+//     </StyleBoxChat>
+//   );
+//   return com;
+// };
 
 const Utilities = () => {
   return (
@@ -58,21 +42,19 @@ const Utilities = () => {
 
 const ChatChannel = (props: any) => {
   return (
-    <Style
-    // className="chat-channel box-chat scroll-bar"
-    >
-      {/* <StyleBoxChat className="box-chat scroll-bar"> */}
+    <Style>
+      {Utilities()}
       <List
-        className="ListBoxChat"
+        className="ListBoxChat scroll-bar"
         size="large"
-        header={Utilities()}
-        bordered
+        bordered={false}
         dataSource={props.boxs}
         renderItem={(item: infoBoxChat) => (
-          <List.Item>{ChatBox(item)}</List.Item>
+          <List.Item className="item">
+            <ChatBox box={item}></ChatBox>
+          </List.Item>
         )}
       />
-      {/* </StyleBoxChat> */}
     </Style>
   );
 };

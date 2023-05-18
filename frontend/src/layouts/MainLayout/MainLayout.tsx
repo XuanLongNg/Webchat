@@ -22,12 +22,10 @@ const MainLayout: React.FC<LayoutProps> = ({ children }) => {
         const result = await client.getListChats();
         let arrtmp: infoBoxChat[] = [];
         for (let i of result) {
-          // console.log(i);
           const tmp: infoBoxChat = await client.getInfoBoxChat(i);
           arrtmp.push(tmp);
         }
         setBoxs(arrtmp);
-        // for (let i in boxs) console.log(i);
 
         setIsLoading(false);
       } catch (err) {
@@ -44,18 +42,15 @@ const MainLayout: React.FC<LayoutProps> = ({ children }) => {
     getListChat();
   }, []);
   if (isLoading) return <div>Loading...</div>;
-  // const url = "/message/" + boxs[0].id;
-  // console.log(url);
 
   return (
     <Style className="d-flex">
-      {/* <Navigate to={url} /> */}
       <div id="sidebar">
         <ChatChannel boxs={boxs} />
         <UserArea user={profile} />
       </div>
       <div id="chat-area" className="flex-grow-1">
-        <ChatArea sender={profile.id} url={"#1"} />
+        <ChatArea sender={profile.id} boxs={boxs} />
       </div>
     </Style>
   );

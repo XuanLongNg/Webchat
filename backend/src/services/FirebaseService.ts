@@ -323,4 +323,13 @@ export class FirebaseService {
     }
     return id;
   }
+  public async getSmallInformation(id) {
+    let data: any = await this.findData("id", id, "/account");
+    data = data[Object.keys(data)[0]];
+    const result = {
+      name: data.information.fname + " " + data.information.lname,
+      image: data.information.image,
+    };
+    return result;
+  }
 }

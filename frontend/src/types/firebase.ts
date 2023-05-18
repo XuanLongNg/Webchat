@@ -2,6 +2,9 @@ export interface infoBoxChat {
   id: string;
   image: string;
   name: string;
+  member: {
+    [key: string]: string;
+  };
 }
 export interface userProfile {
   id: string;
