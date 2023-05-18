@@ -6,6 +6,9 @@ import { useParams } from "react-router-dom";
 import { infoBoxChat, message } from "../../../types/firebase";
 import { Button, Form, Input } from "antd";
 import Client from "../../../database/client";
+import FirebaseConfig from "../../../configs/firebaseConfig";
+import { onValue, ref } from "firebase/database";
+const firebaseConfig = new FirebaseConfig();
 const client = new Client();
 const Header = (props: any) => {
   const [isLoading, setIsLoading] = useState(true);
@@ -65,11 +68,22 @@ const Messages = (props: any) => {
   useEffect(() => {
     async function get() {
       try {
-        const tmp = await client.getMessage(id);
-        const tmp1 = await client.getMessageClient(id);
-        setData(tmp);
-        console.log(tmp);
-
+        const db = firebaseConfig.getDatabase();
+        const url =
+          (await firebaseConfig.getUrlByKey("id", id, "/messages")) +
+          "/message";
+        const starCountRef = ref(db, url);
+        onValue(starCountRef, (snapshot) => {
+          const data = snapshot.val();
+          console.log(data);
+          const arr = [];
+          const keys = Object.keys(data);
+          for (let i of keys) {
+            arr.push(data[i]);
+          }
+          arr.pop();
+          setData(arr);
+        });
         setIsLoading(false);
       } catch (err) {
         console.log("Error: " + err);
@@ -78,7 +92,6 @@ const Messages = (props: any) => {
     }
     get();
   }, []);
-  // const messages: any = ws.getMessage(props.sender, props.recipient);
   const idUser = props.sender;
   if (isLoading) return <p>Loading</p>;
 

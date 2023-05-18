@@ -9,12 +9,14 @@ import {
   equalTo,
   query,
 } from "firebase/database";
-import { MainStructure, keyFirebase } from "../types/firebase";
+import { MainStructure, Message, keyFirebase } from "../types/firebase";
 import System from "../database/system";
 const system = new System();
 class FirebaseServiceClient {
-  private app: FirebaseApp | null;
-  private database: Database | null;
+  private app: any;
+  // FirebaseApp | null;
+  private database: any;
+  // Database | null;
 
   public constructor() {
     this.app = null;
@@ -39,7 +41,9 @@ class FirebaseServiceClient {
       })
       .catch((err) => console.log(err));
   }
-
+  public getDatabase() {
+    return this.database;
+  }
   public async getData(refurl: string): Promise<MainStructure | undefined> {
     try {
       if (this.database) {
@@ -61,7 +65,7 @@ class FirebaseServiceClient {
     key: string,
     value: string,
     refurl: string
-  ): Promise<MainStructure | undefined> {
+  ): Promise<any> {
     if (this.database) {
       const dbRef = ref(this.database, refurl);
       const queryRef = query(dbRef, orderByChild(key), equalTo(value));
@@ -76,6 +80,25 @@ class FirebaseServiceClient {
         console.error("Error retrieving data:", error);
       }
     } else return undefined;
+  }
+  public async getUrlByKey(key: string, value: string, refurl: string) {
+    if (this.database) {
+      const dbRef = ref(this.database, refurl);
+      const queryRef = query(dbRef, orderByChild(key), equalTo(value));
+      try {
+        const snapshot = await get(queryRef);
+        if (snapshot.exists()) {
+          const data = snapshot.val();
+          return (
+            (refurl[refurl.length - 1] == "/" ? refurl : refurl + "/") +
+            Object.keys(data)[0]
+          );
+        }
+        return refurl;
+      } catch (error) {
+        console.error("Error retrieving data:", error);
+      }
+    } else return refurl;
   }
   public async setData(refurl: string, data: MainStructure): Promise<void> {
     if (this.database) {

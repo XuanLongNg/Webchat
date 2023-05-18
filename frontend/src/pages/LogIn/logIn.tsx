@@ -45,7 +45,7 @@ const Login = () => {
     <Navigate to="/message" />
   ) : (
     <Style>
-      <div>
+      <div className="container">
         <Form
           name="basic"
           labelCol={{ span: 8 }}
@@ -55,33 +55,45 @@ const Login = () => {
           onFinish={onFinish}
           onFinishFailed={onFinishFailed}
           autoComplete="off"
+          layout="vertical"
         >
+          <Form.Item className="container-header d-flex justify-content-center align-items-center">
+            <h1>Login</h1>
+          </Form.Item>
           <Form.Item
-            label="Username"
+            className="input"
+            label={<span style={{ color: "#fff" }}>Username</span>}
             name="username"
+            wrapperCol={{ span: 24 }}
             rules={[{ required: true, message: "Please input your username!" }]}
+            colon={false}
+            required={false}
           >
             <Input />
           </Form.Item>
 
           <Form.Item
-            label="Password"
+            className="input"
+            label={<span style={{ color: "#fff" }}>Password</span>}
             name="password"
+            wrapperCol={{ span: 24 }}
             rules={[{ required: true, message: "Please input your password!" }]}
+            colon={false}
+            required={false}
           >
             <Input.Password />
           </Form.Item>
 
-          <Form.Item
+          {/* <Form.Item
             name="remember"
             valuePropName="checked"
             wrapperCol={{ offset: 8, span: 16 }}
           >
             <Checkbox>Remember me</Checkbox>
-          </Form.Item>
+          </Form.Item> */}
 
-          <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-            <Button type="primary" htmlType="submit">
+          <Form.Item wrapperCol={{ span: 24 }}>
+            <Button className="btn" type="primary" htmlType="submit">
               Submit
             </Button>
           </Form.Item>
