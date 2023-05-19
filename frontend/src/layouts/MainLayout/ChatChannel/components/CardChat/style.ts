@@ -1,8 +1,9 @@
 import styled from "styled-components";
-import colors from "../../../../styles/color";
+import colors from "../../../../../styles/color";
 
 const Style = styled.a`
   height: 100%;
+  width: 100%;
   background-color: ${colors.black_blue_color};
   transition: background-color 0.4s ease;
   transition: box-shadow 0.4s ease;
@@ -37,7 +38,8 @@ const Style = styled.a`
         height: 1.4em;
         overflow: hidden;
         font-size: 20px;
-        margin: 0px 0px 1px;
+        margin: -10px 0px 1px;
+        line-height: 1.4em;
       }
       .body {
         height: 35%;

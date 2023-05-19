@@ -46,7 +46,7 @@ const MainLayout: React.FC<LayoutProps> = ({ children }) => {
   return (
     <Style className="d-flex">
       <div id="sidebar">
-        <ChatChannel boxs={boxs} />
+        <ChatChannel idUser={profile.id} boxs={boxs} />
         <UserArea user={profile} />
       </div>
       <div id="chat-area" className="flex-grow-1">

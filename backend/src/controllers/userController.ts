@@ -131,9 +131,16 @@ class UserController {
       const data = {
         ...req.body,
       };
-      const result = await firebaseService.addFriend(data);
-      if (result) return res.status(200).send({ result: "complete" });
-      return res.status(200).send({ result: "rejected" });
+      console.log("Data: ", data);
+
+      const hasFriend = await firebaseService.hasFriend(data);
+      console.log(hasFriend);
+
+      if (hasFriend) return res.status(200).send({ result: "rejected" });
+      await firebaseService.addFriend(data);
+      return res.status(200).send({ result: "complete" });
+      // if (result) return res.status(200).send({ result: "complete" });
+      // return res.status(200).send({ result: "rejected" });
     } catch (error) {
       console.log(error);
     }
@@ -158,6 +165,57 @@ class UserController {
       };
       const result = await firebaseService.getSmallInformation(data.id);
       return res.status(200).send(result);
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
+  }
+  async uploadImage(req: Request, res: Response) {
+    try {
+      const data = {
+        ...req.body,
+      };
+      console.log(data);
+      console.log(req.file);
+
+      // const result = await firebaseService.uploadImage(data.file);
+      return res.status(200).send({ message: "pending" });
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
+  }
+  async searchData(req: Request, res: Response) {
+    try {
+      const data = {
+        ...req.body,
+      };
+      console.log(data);
+
+      const fullData = await firebaseService.getAllData("/account");
+      const arr = [];
+      const keys = Object.keys(fullData);
+      for (let i of keys) {
+        arr.push(fullData[i]);
+      }
+      arr.shift();
+      arr.shift();
+
+      // console.log(arr);
+      const ans = [];
+      for (let i of arr) {
+        if (i.id === data.id) continue;
+        if (
+          i.id.indexOf(data.key) != -1 ||
+          i.information.fname.indexOf(data.key) != -1 ||
+          i.information.lname.indexOf(data.key) != -1
+        )
+          ans.push(i);
+      }
+      console.log(ans);
+
+      // console.log(fullData);
+      return res.status(200).send(ans);
     } catch (error) {
       console.log(error);
       throw error;

@@ -5,6 +5,7 @@ import { AppRoutes } from "./appRoutes";
 import Homepage from "../pages/home/homePage";
 import Login from "../pages/LogIn/logIn";
 import Message from "../pages/Message/message";
+import Register from "../pages/Register/register";
 type RouteProperties = {
   layout?: React.FC<LayoutProps>;
 };
@@ -20,6 +21,10 @@ export const ConfigRoutes: ConfigRoute[] = [
   {
     element: <Login />,
     path: AppRoutes.LOG_IN,
+  },
+  {
+    element: <Register />,
+    path: AppRoutes.REGISTER,
   },
   {
     element: <Message />,

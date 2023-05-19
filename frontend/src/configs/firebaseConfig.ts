@@ -11,16 +11,18 @@ import {
 } from "firebase/database";
 import { MainStructure, Message, keyFirebase } from "../types/firebase";
 import System from "../database/system";
+import { getStorage } from "firebase/storage";
 const system = new System();
 class FirebaseServiceClient {
   private app: any;
   // FirebaseApp | null;
   private database: any;
   // Database | null;
-
+  private storage: any;
   public constructor() {
     this.app = null;
     this.database = null;
+    this.storage = null;
     system
       .getKeyFirebase()
       .then((keyFirebase) => {
@@ -38,11 +40,15 @@ class FirebaseServiceClient {
 
         this.app = initializeApp(firebaseConfig);
         this.database = getDatabase(this.app);
+        this.storage = getStorage(this.app);
       })
       .catch((err) => console.log(err));
   }
   public getDatabase() {
     return this.database;
+  }
+  public getStorage() {
+    return this.storage;
   }
   public async getData(refurl: string): Promise<MainStructure | undefined> {
     try {

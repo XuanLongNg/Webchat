@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, Checkbox, Form, Input } from "antd";
+import { Button, Checkbox, Form, Input, notification, Space } from "antd";
 import Style from "./style";
 import axios from "axios";
 import { Navigate } from "react-router-dom";
@@ -8,8 +8,12 @@ interface LoginFormData {
   username: string;
   password: string;
 }
+
+type NotificationType = "success" | "error";
+
 const Login = () => {
   const [isLogin, SetIsLogin] = useState(false);
+
   const onFinish = (values: any) => {
     const data: LoginFormData = {
       username: values.username,
@@ -24,10 +28,15 @@ const Login = () => {
         if (message === "Login complete") {
           document.cookie = response.data.id;
           console.log(document.cookie);
-
+          notification.success({
+            message: "Login complete",
+          });
           SetIsLogin(true);
           return;
         } else {
+          notification.error({
+            message: "User or password incorrect",
+          });
           SetIsLogin(false);
           return;
         }

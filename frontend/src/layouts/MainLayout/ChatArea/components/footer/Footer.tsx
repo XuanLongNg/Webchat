@@ -6,6 +6,7 @@ const Footer = (props: any) => {
   // console.log("Message", props);
   const client = props.client;
   const onFinish = (values: any) => {
+    if (!values.message) return;
     const data: message = {
       sender: props.sender,
       time: new Date().toString(),
@@ -29,7 +30,7 @@ const Footer = (props: any) => {
         name="basic"
         labelCol={{ span: 32 }}
         wrapperCol={{ span: 32 }}
-        style={{ maxWidth: 600 }}
+        style={{ width: "100%" }}
         initialValues={{ remember: true }}
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}
@@ -37,11 +38,11 @@ const Footer = (props: any) => {
         layout="inline"
       >
         <Form.Item
-          wrapperCol={{ span: 32 }}
+          wrapperCol={{ span: 24 }}
           name="message"
-          rules={[{ required: true, message: "Enter your message!" }]}
+          //   rules={[{ required: true, message: "Enter your message!" }]}
         >
-          <Input />
+          <Input className="input" />
         </Form.Item>
 
         <Form.Item wrapperCol={{ span: 16 }}>

@@ -2,6 +2,7 @@ export class AppRoutes {
   static HOME = "/";
   static NOT_FOUND = "/404";
   static LOG_IN = "/login";
+  static REGISTER = "/register";
   static COMING_SOON = "/coming-soon";
   static URL = "/:url";
   static MESSAGE = "/message/:message";

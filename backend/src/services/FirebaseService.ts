@@ -4,12 +4,15 @@ import AppConfig from "../configs/appConfig";
 import { Account, MainStructure, message } from "../types/firebaseTypes";
 import Hashing from "../utils/hashing";
 import uuid from "../utils/uuid";
+import { v4 as uuidv4 } from "uuid";
 const hashing = new Hashing();
 const default_avatar =
   "https://firebasestorage.googleapis.com/v0/b/web-chat-neil.appspot.com/o/default_image.jpg?alt=media&token=5213bee9-6cf2-4419-b949-3e9644c2a5fb";
 export class FirebaseService {
   private app: admin.app.App;
   private database: admin.database.Database;
+  private storage: admin.storage.Storage;
+  private bucket: any;
   private constructor() {
     const app = admin.initializeApp({
       credential: admin.credential.cert({
@@ -19,10 +22,13 @@ export class FirebaseService {
       }),
       databaseURL:
         "https://web-chat-neil-default-rtdb.asia-southeast1.firebasedatabase.app",
+      storageBucket: "web-chat-neil.appspot.com",
     });
     // Initialize Realtime Database and get a reference to the service
     this.app = app;
     this.database = getDatabase(app);
+    this.storage = app.storage();
+    this.bucket = this.storage.bucket();
   }
   public static init(): FirebaseService {
     return new FirebaseService();
@@ -270,8 +276,8 @@ export class FirebaseService {
   public async hasFriend({ id, idFriend }: { id: string; idFriend: string }) {
     const url = (await this.getUrlById("id", id, "/friend/")) + "/listFriends/";
     const result = await this.database.ref(url).once("value");
-    const keys = Object.keys(result);
-    for (let i of keys) if (result[i] == idFriend) return true;
+    const keys = Object.keys(result.val());
+    for (let i of keys) if (result.val()[i] == idFriend) return true;
     return false;
   }
   public async addFriend({ id, idFriend }: { id: string; idFriend: string }) {
@@ -300,7 +306,6 @@ export class FirebaseService {
     let nameUser1 = await this.getNameOrUser(id);
     let nameUser2 = await this.getNameOrUser(idFriend);
     this.createBoxChat(id, idFriend, nameUser1, nameUser2);
-    return true;
   }
   public async addUserOnGroup(id, idGr) {
     const url =
@@ -327,9 +332,47 @@ export class FirebaseService {
     let data: any = await this.findData("id", id, "/account");
     data = data[Object.keys(data)[0]];
     const result = {
+      id: id,
       name: data.information.fname + " " + data.information.lname,
       image: data.information.image,
     };
     return result;
+  }
+  public async uploadImage(file: File) {
+    const uniqueFilename = `${uuidv4()}_${file.name}`;
+    const storageRef = this.storage.bucket().file(`uploads/${uniqueFilename}`);
+    const fileReader = new FileReader();
+
+    const response: void = await new Promise((resolve, reject) => {
+      fileReader.onload = (event: ProgressEvent<FileReader>) => {
+        const fileData = event.target?.result as ArrayBuffer;
+
+        storageRef
+          .createWriteStream({
+            metadata: {
+              contentType: file.type, // Loại nội dung của tệp tin
+            },
+          })
+          .on("finish", resolve)
+          .on("error", reject)
+          .end(fileData);
+      };
+
+      fileReader.onerror = reject;
+      fileReader.readAsArrayBuffer(file);
+    });
+
+    const signedUrls: string[] = await storageRef.getSignedUrl({
+      action: "read",
+      expires: "03-01-2500", // Điều chỉnh ngày hết hạn theo yêu cầu của bạn
+    });
+
+    const publicUrl: string = signedUrls[0]; // Lấy URL công khai từ danh sách signedUrls
+
+    return publicUrl;
+  }
+  public async getAllData(Ref: string) {
+    const response = await this.database.ref(Ref).once("value");
+    return response.val();
   }
 }

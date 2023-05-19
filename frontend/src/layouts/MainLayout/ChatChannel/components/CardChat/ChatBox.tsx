@@ -1,4 +1,4 @@
-import { infoBoxChat } from "../../../../types/firebase";
+import { infoBoxChat } from "../../../../../types/firebase";
 import Style from "./style";
 
 const ChatBox = (props: any) => {
