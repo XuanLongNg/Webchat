@@ -4,9 +4,11 @@ const Utilities = styled.div``;
 
 export const StyleUtilities = styled(Utilities)`
   align-items: center;
-  height: 10%;
+  height: calc((100% / 9));
   width: 100%;
   padding: 0 5%;
+  background-color: ${colors.light_blue_color};
+
   .search {
     /* font:  */
     width: 70%;
@@ -34,7 +36,7 @@ const Style = styled.div`
   box-sizing: border-box;
   flex-wrap: wrap;
   .ListBoxChat {
-    height: 90%;
+    height: calc((100% / 9 * 8));
     overflow-y: scroll;
     overflow-x: hidden;
     .item {

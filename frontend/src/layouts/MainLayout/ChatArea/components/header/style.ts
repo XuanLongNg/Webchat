@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import colors from "../../../../../styles/color";
-const color_header = colors.black_blue_color,
+const color_header = colors.light_blue_color,
   color_text_header = colors.white;
 const Style = styled.div`
   align-items: center;

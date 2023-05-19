@@ -1,24 +1,10 @@
-import React, { useState, useEffect } from "react";
 import Style, { StyleUtilities } from "./style";
 import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import "../../../styles/scrollbar/index.css";
-import Client from "../../../database/client";
 import { infoBoxChat } from "../../../types/firebase";
-import { useParams, Route, Navigate } from "react-router-dom";
-import { Divider, List, Typography } from "antd";
+import { List } from "antd";
 import ChatBox from "./components/ChatBox";
-
-// const ListChatBox = (boxs: infoBoxChat[]) => {
-//   const com = (
-//     <StyleBoxChat className="box-chat scroll-bar">
-//       {boxs.map((box: infoBoxChat) => {
-//         return ChatBox(box);
-//       })}
-//     </StyleBoxChat>
-//   );
-//   return com;
-// };
 
 const Utilities = () => {
   return (

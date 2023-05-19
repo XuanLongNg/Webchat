@@ -3,6 +3,7 @@ import colors from "../../../../styles/color";
 
 const Style = styled.a`
   height: 100%;
+  background-color: ${colors.black_blue_color};
   transition: background-color 0.4s ease;
   transition: box-shadow 0.4s ease;
 
