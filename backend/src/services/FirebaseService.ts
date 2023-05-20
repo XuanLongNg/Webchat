@@ -57,7 +57,10 @@ export class FirebaseService {
   }
   public async getUrlById(key: string, id: string, url: string) {
     let data = await this.findData(key, id, url);
-    if (data) return url + Object.keys(data)[0];
+    if (data)
+      return (
+        (url[url.length - 1] == "/" ? url : url + "/") + Object.keys(data)[0]
+      );
     return url;
   }
   public async getUserByUsername(
@@ -374,5 +377,13 @@ export class FirebaseService {
   public async getAllData(Ref: string) {
     const response = await this.database.ref(Ref).once("value");
     return response.val();
+  }
+  public async updateProfile(data: Account) {
+    const url = await this.getUrlById("id", data.id, "/account");
+    console.log(url);
+    const dbRef = await this.database.ref(url).update(data);
+    console.log(dbRef);
+    return true;
+    // await dbRef.once("value");
   }
 }

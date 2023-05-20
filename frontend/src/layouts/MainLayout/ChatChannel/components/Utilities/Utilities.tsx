@@ -1,4 +1,4 @@
-import Style, { StyleModal } from "./style";
+import Style, { StyleModalSearch, StyleModalView } from "./style";
 import React, { useState, useRef } from "react";
 import {
   Button,
@@ -10,26 +10,13 @@ import {
   notification,
   Card,
   Descriptions,
+  Image,
 } from "antd";
 import axios from "axios";
 import { Account } from "../../../../../types/firebase";
 import Meta from "antd/es/card/Meta";
 import { Divider } from "antd";
 
-const data = [
-  {
-    title: "Ant Design Title 1",
-  },
-  {
-    title: "Ant Design Title 2",
-  },
-  {
-    title: "Ant Design Title 3",
-  },
-  {
-    title: "Ant Design Title 4",
-  },
-];
 const BASE_URL = "http://localhost:4000";
 const Utilities = (props: any) => {
   const [isModalSearchOpen, setIsModalSearchOpen] = useState(false);
@@ -98,146 +85,110 @@ const Utilities = (props: any) => {
   };
   const ModalUser = (user: any) => {
     return (
-      <div>
-        <Modal
-          open={isModalUserOpen}
-          onOk={handleOkUserModal}
-          onCancel={handleCancelUserModal}
-          footer={null}
-          centered
+      <StyleModalView
+        open={isModalUserOpen}
+        onOk={handleOkUserModal}
+        onCancel={handleCancelUserModal}
+        footer={null}
+        centered
+      >
+        <Card
+          className="card scroll-bar"
+          hoverable
+          cover={
+            <div
+              className="d-flex justify-content-center card-cover"
+              style={{
+                background: `rgba(0,0,0,0.3) url(${user.information.image}) no-repeat center/cover`,
+              }}
+            >
+              <div className="card-filter-blur-cover" />
+              <Image
+                className="card-avatar"
+                // alt="avatar"
+                preview
+                src={user.information.image}
+              />
+            </div>
+          }
         >
-          <Card
-            hoverable
-            // style={{ width: 240 }}
-            cover={
-              <div
-                style={{
-                  width: "100%",
-                  height: "200px",
-                  display: "flex",
-                  justifyContent: "center",
-                  background: `rgba(0,0,0,0.3) url(${user.information.image}) no-repeat center/cover`,
-                  borderRadius: "11px",
-                  position: "relative",
-                  //   filter: "blur(8px)",
-                }}
-              >
-                <div
-                  style={{
-                    content: '""',
-                    position: "absolute",
-                    top: 0,
-                    left: 0,
-                    width: "100%",
-                    height: "100%",
-                    background: "rgba(0, 0, 0, 0.3)",
-                    backdropFilter: "blur(8px)",
-                    pointerEvents: "none",
-                  }}
-                />
-                <img
-                  alt="example"
-                  src={user.information.image}
-                  style={{
-                    position: "absolute",
-                    objectFit: "cover",
-                    height: "100%",
-                    background: "transparent",
-                  }}
-                />
-              </div>
-            }
-          >
-            <Meta
-              title={user.information.fname + " " + user.information.lname}
-              description={user.id}
-            />
-            <Divider />
-            <Descriptions title="About me" layout="vertical">
-              <Descriptions.Item label="Date of birth">
-                {user.information.dob}
-              </Descriptions.Item>
-              <Descriptions.Item label="Address">
-                {user.information.address}
-              </Descriptions.Item>
-              <Descriptions.Item label="Introduce">
-                {user.information.introduce}
-              </Descriptions.Item>
-            </Descriptions>
-            <Divider />
-          </Card>
-          {/* <Avatar src={user.information.image} /> */}
-        </Modal>
-      </div>
+          <Meta
+            title={user.information.fname + " " + user.information.lname}
+            description={user.id}
+          />
+          <Divider />
+          <Descriptions title="About me" layout="vertical">
+            <Descriptions.Item label="Date of birth">
+              {user.information.dob}
+            </Descriptions.Item>
+            <Descriptions.Item label="Address">
+              {user.information.address}
+            </Descriptions.Item>
+            <br />
+            <Descriptions.Item label="Introduce">
+              {user.information.introduce}
+            </Descriptions.Item>
+          </Descriptions>
+          <Divider />
+        </Card>
+      </StyleModalView>
     );
   };
   const ModalAddFriend = () => {
     return (
-      <StyleModal>
-        <Modal
-          open={isModalSearchOpen}
-          onOk={handleOk}
-          onCancel={handleCancel}
-          footer={null}
-        >
-          <Space direction="vertical" size="large">
-            <Space.Compact style={{ width: "100%" }}>
-              <Input ref={value} placeholder="Search id or name" />
-              <Button type="primary" onClick={handleSrearchFriend}>
-                Search
-              </Button>
-            </Space.Compact>
-          </Space>
-          <List
-            className="scroll-bar"
-            style={{
-              maxHeight: "300px",
-              overflowX: "hidden",
-              overflowY: "scroll",
-            }}
-            itemLayout="horizontal"
-            dataSource={ArrayUser}
-            renderItem={(item: Account, index) => (
-              <List.Item
-                actions={[
-                  <Button
-                    key="list-loadmore-edit"
-                    type="primary"
-                    onClick={() => handleAddFriend(item.id)}
-                  >
-                    Add friend
-                  </Button>,
-                  <Button
-                    key="list-loadmore-more"
-                    onClick={() => {
-                      showModalUser();
-                      setUserProfile(item);
-                    }}
-                  >
-                    View
-                  </Button>,
-                ]}
-              >
-                <List.Item.Meta
-                  style={{ display: "flex", alignItems: "center" }}
-                  avatar={
-                    <Avatar
-                      src={item.information.image}
-                      //   style={{ verticalAlign: "middle" }}
-                    />
-                  }
-                  title={
-                    <p style={{ marginBottom: "0" }}>
-                      {item.information.fname + " " + item.information.lname}
-                    </p>
-                  }
-                  description={item.id}
-                />
-              </List.Item>
-            )}
-          />
-        </Modal>
-      </StyleModal>
+      <StyleModalSearch
+        open={isModalSearchOpen}
+        onOk={handleOk}
+        onCancel={handleCancel}
+        footer={null}
+      >
+        <Space direction="vertical" size="large">
+          <Space.Compact style={{ width: "100%" }}>
+            <Input ref={value} placeholder="Search id or name" />
+            <Button type="primary" onClick={handleSrearchFriend}>
+              Search
+            </Button>
+          </Space.Compact>
+        </Space>
+        <List
+          className="scroll-bar list-user"
+          itemLayout="horizontal"
+          dataSource={ArrayUser}
+          renderItem={(item: Account, index) => (
+            <List.Item
+              actions={[
+                <Button
+                  key="list-loadmore-edit"
+                  type="primary"
+                  onClick={() => handleAddFriend(item.id)}
+                >
+                  Add friend
+                </Button>,
+                <Button
+                  key="list-loadmore-more"
+                  onClick={() => {
+                    showModalUser();
+                    setUserProfile(item);
+                  }}
+                >
+                  View
+                </Button>,
+              ]}
+            >
+              <List.Item.Meta
+                className="d-flex align-items-center"
+                avatar={<Avatar src={item.information.image} />}
+                title={
+                  <p style={{ marginBottom: "0" }}>
+                    {item.information.fname + " " + item.information.lname}
+                  </p>
+                }
+                description={item.id}
+              />
+            </List.Item>
+          )}
+        />
+      </StyleModalSearch>
     );
   };
   return (

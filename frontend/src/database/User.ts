@@ -7,6 +7,7 @@ export default class User {
     this.user = {
       id: "",
       username: "",
+      password: "",
       information: {
         address: "",
         dob: "",

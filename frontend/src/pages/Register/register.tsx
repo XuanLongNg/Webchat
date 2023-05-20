@@ -9,6 +9,7 @@ import type { RcFile } from "antd/es/upload/interface";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { v4 as uuidv4 } from "uuid";
 import FirebaseServiceClient from "../../configs/firebaseConfig";
+import moment from "moment";
 const firebaseServiceClient = new FirebaseServiceClient();
 interface RegisterFormData {
   username: string;
@@ -34,6 +35,8 @@ const Register = () => {
   };
   const onFinish = (values: any) => {
     setIsRegisted(false);
+    // console.log(moment(values.dob.$d).format("YYYY/MM/DD"));
+    // return;
     const uniqueFilename = `${uuidv4()}_${image.name}`;
 
     const storageRef = ref(firebaseServiceClient.getStorage(), uniqueFilename);
@@ -56,12 +59,16 @@ const Register = () => {
           information: {
             fname: values.fname,
             lname: values.lname,
-            dob: values.dob,
+            dob: moment(values.dob.$d).format("YYYY-MM-sDD"),
             address: values.address,
             introduce: values.introduce,
             image: downloadURL,
           },
         };
+        console.log(values.dob.$d);
+
+        console.log(data);
+
         const url_api = URL_SERVER + "/api/user/register";
         axios
           .post(url_api, data)

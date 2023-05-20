@@ -221,6 +221,20 @@ class UserController {
       throw error;
     }
   }
+  async updateProfile(req: Request, res: Response) {
+    try {
+      const data = {
+        ...req.body,
+      };
+      console.log(data);
+
+      const respone = await firebaseService.updateProfile(data);
+      return res.status(200).send({ message: respone });
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
+  }
 }
 
 export default UserController;

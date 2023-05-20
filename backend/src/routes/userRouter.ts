@@ -30,5 +30,6 @@ userRouter.post(
   userController.uploadImage
 );
 userRouter.post("/searchData", userController.searchData);
+userRouter.post("/updateProfile", userController.updateProfile);
 
 export default userRouter;

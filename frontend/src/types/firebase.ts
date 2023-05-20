@@ -9,6 +9,7 @@ export interface infoBoxChat {
 export interface userProfile {
   id: string;
   username: string;
+  password: string;
   information: {
     address: string;
     dob: string;

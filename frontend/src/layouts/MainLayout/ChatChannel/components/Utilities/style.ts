@@ -1,10 +1,47 @@
 import styled from "styled-components";
 import colors from "../../../../../styles/color";
-export const StyleModal = styled.div`
+import { Modal } from "antd";
+export const StyleModalSearch = styled(Modal)`
   .list-user {
     max-height: 300px;
     overflow-x: hidden;
     overflow-y: scroll;
+  }
+`;
+export const StyleModalView = styled(Modal)`
+  .card {
+    max-height: 600px;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    .card-cover {
+      width: 100%;
+      height: 200px;
+      border-radius: 11px;
+      position: relative;
+      .card-filter-blur-cover {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.3);
+        backdrop-filter: blur(8px);
+        pointer-events: none;
+      }
+      .card-avatar {
+        position: absolute;
+        object-fit: cover;
+        height: 100%;
+        background: transparent;
+        position: absolute;
+        object-fit: cover;
+        width: auto;
+        height: 100%;
+        transform: translateX(-50%);
+        background: transparent;
+      }
+    }
   }
 `;
 const Style = styled.div`
