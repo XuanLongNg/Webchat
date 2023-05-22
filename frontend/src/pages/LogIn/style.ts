@@ -9,7 +9,7 @@ const Style = styled.div`
   align-items: center;
   .container {
     background-color: ${colors.light_blue_color};
-    height: 30em;
+    height: 35em;
     width: 22em;
     border-radius: 10px;
     padding: 2em;

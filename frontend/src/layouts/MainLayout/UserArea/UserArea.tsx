@@ -160,8 +160,8 @@ const UserArea = (props: any) => {
                     <CheckCircleFilled
                       rev=""
                       onClick={() => {
-                        handleCancelEditName();
                         handleSubmit();
+                        handleCancelEditName();
                       }}
                     />
                     <CloseCircleFilled rev="" onClick={handleCancelEditName} />
@@ -202,8 +202,8 @@ const UserArea = (props: any) => {
                     <CheckCircleFilled
                       rev=""
                       onClick={() => {
-                        handleCancelEditDob();
                         handleSubmit();
+                        handleCancelEditDob();
                       }}
                     />
                     <CloseCircleFilled rev="" onClick={handleCancelEditDob} />
@@ -243,8 +243,8 @@ const UserArea = (props: any) => {
                     <CheckCircleFilled
                       rev=""
                       onClick={() => {
-                        handleCancelEditAddress();
                         handleSubmit();
+                        handleCancelEditAddress();
                       }}
                     />
                     <CloseCircleFilled
@@ -287,8 +287,8 @@ const UserArea = (props: any) => {
                     <CheckCircleFilled
                       rev=""
                       onClick={() => {
-                        handleCancelEditIntroduce();
                         handleSubmit();
+                        handleCancelEditIntroduce();
                       }}
                     />
                     <CloseCircleFilled
@@ -302,6 +302,18 @@ const UserArea = (props: any) => {
           </Descriptions>
           <Divider />
         </Card>
+
+        {/* <Button
+          type="primary"
+          onClick={() => {
+            notification.success({ message: "log out" });
+            setTimeout(() => {
+              window.location.href = "/login";
+            }, 3000);
+          }}
+        >
+          Logout
+        </Button> */}
       </StyleModalView>
     );
   };
@@ -309,11 +321,11 @@ const UserArea = (props: any) => {
     setIsModalSendData(true);
   };
   const handleSendData = () => {
-    setIsModalSendData(false);
     setName(name);
     setDob(dob);
     setAddress(address);
     setIntroduce(introduce);
+    setIsModalSendData(false);
     setReadOnlyName(true);
     setCloseEditName(false);
     setReadOnlyDob(true);

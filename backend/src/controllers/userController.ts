@@ -59,8 +59,6 @@ class UserController {
     }
   }
   async getProfile(req: Request, res: Response) {
-    // console.log(req.body.id);
-
     const user = await firebaseService.getProfileById(req.body.id);
     if (user === undefined)
       return res.status(404).send({ message: "not logged in" });
@@ -83,13 +81,6 @@ class UserController {
       console.log(req.body.id);
       const info = await firebaseService.getInfoBoxChat(req.body.id);
       if (info) return res.send(info);
-      // if (1)
-      //   return res
-      //     .status(200)
-      //     .send([
-      //       "c1a3c8de54444d88b3f1d2652892b045",
-      //       "87c24315436d435fbc6792389e374c8a",
-      //     ]);
       return res.status(403).send({ message: "Box chat doesn't exits" });
     } catch (err) {
       console.log("Error: ", err);
@@ -139,8 +130,6 @@ class UserController {
       if (hasFriend) return res.status(200).send({ result: "rejected" });
       await firebaseService.addFriend(data);
       return res.status(200).send({ result: "complete" });
-      // if (result) return res.status(200).send({ result: "complete" });
-      // return res.status(200).send({ result: "rejected" });
     } catch (error) {
       console.log(error);
     }
@@ -151,9 +140,7 @@ class UserController {
         ...req.body,
       };
       const result = await firebaseService.createGroup(data);
-      // if (result)
       return res.status(200).send({ result: "complete" });
-      // return res.status(200).send({ result: "rejected" });
     } catch (error) {
       console.log(error);
     }

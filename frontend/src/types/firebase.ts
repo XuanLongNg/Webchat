@@ -50,19 +50,21 @@ export interface Message {
 export interface GroupChat {
   id: string;
   boxchat: {
-    [key: string]: string;
+    [key: string]: string | number;
   };
 }
 export interface GroupChatsInfomation {
   id: string;
   image: string;
   name: string;
+  member: {
+    [key: string]: string | number;
+  };
 }
 export interface Friend {
   id: string;
   listFriends: {
-    [key: string]: string;
-    number: string;
+    [key: string]: string | number;
   };
 }
 export interface MainStructure {

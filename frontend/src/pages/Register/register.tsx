@@ -1,5 +1,13 @@
 import React, { useState } from "react";
-import { Button, Form, Input, DatePicker, Upload, notification } from "antd";
+import {
+  Button,
+  Form,
+  Input,
+  DatePicker,
+  Upload,
+  notification,
+  Divider,
+} from "antd";
 import Style from "./style";
 import axios from "axios";
 import { Navigate } from "react-router-dom";
@@ -143,7 +151,9 @@ const Register = () => {
             label={<span style={{ color: "#fff" }}>First name</span>}
             name="fname"
             wrapperCol={{ span: 24 }}
-            rules={[{ required: true, message: "Please input your password!" }]}
+            rules={[
+              { required: true, message: "Please input your first name!" },
+            ]}
             colon={false}
             required={false}
           >
@@ -154,7 +164,9 @@ const Register = () => {
             label={<span style={{ color: "#fff" }}>Last name</span>}
             name="lname"
             wrapperCol={{ span: 24 }}
-            rules={[{ required: true, message: "Please input your password!" }]}
+            rules={[
+              { required: true, message: "Please input your last name!" },
+            ]}
             colon={false}
             required={false}
           >
@@ -172,7 +184,7 @@ const Register = () => {
             label={<span style={{ color: "#fff" }}>Address</span>}
             name="address"
             wrapperCol={{ span: 24 }}
-            rules={[{ required: true, message: "Please input your password!" }]}
+            rules={[{ required: true, message: "Please input your address!" }]}
             colon={false}
             required={false}
           >
@@ -204,6 +216,16 @@ const Register = () => {
             <Button className="btn" type="primary" htmlType="submit">
               Submit
             </Button>
+          </Form.Item>
+          <Form.Item wrapperCol={{ span: 24 }}>
+            <Divider style={{ borderColor: "white", color: "white" }}>
+              or
+            </Divider>
+            <a href="/login">
+              <Button className="btn" type="primary">
+                Register
+              </Button>
+            </a>
           </Form.Item>
         </Form>
       </div>

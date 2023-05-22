@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, Checkbox, Form, Input, notification, Space } from "antd";
+import { Button, Form, Input, notification, Divider } from "antd";
 import Style from "./style";
 import axios from "axios";
 import { Navigate } from "react-router-dom";
@@ -51,7 +51,7 @@ const Login = () => {
   };
 
   return isLogin ? (
-    <Navigate to="/message" />
+    <Navigate to="/" />
   ) : (
     <Style>
       <div className="container">
@@ -93,18 +93,20 @@ const Login = () => {
             <Input.Password />
           </Form.Item>
 
-          {/* <Form.Item
-            name="remember"
-            valuePropName="checked"
-            wrapperCol={{ offset: 8, span: 16 }}
-          >
-            <Checkbox>Remember me</Checkbox>
-          </Form.Item> */}
-
           <Form.Item wrapperCol={{ span: 24 }}>
             <Button className="btn" type="primary" htmlType="submit">
               Submit
             </Button>
+          </Form.Item>
+          <Form.Item wrapperCol={{ span: 24 }}>
+            <Divider style={{ borderColor: "white", color: "white" }}>
+              or
+            </Divider>
+            <a href="/register">
+              <Button className="btn" type="primary">
+                Register
+              </Button>
+            </a>
           </Form.Item>
         </Form>
       </div>
