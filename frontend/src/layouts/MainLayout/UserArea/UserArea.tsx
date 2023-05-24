@@ -303,17 +303,18 @@ const UserArea = (props: any) => {
           <Divider />
         </Card>
 
-        {/* <Button
+        <Button
           type="primary"
           onClick={() => {
             notification.success({ message: "log out" });
             setTimeout(() => {
               window.location.href = "/login";
+              console.log("Hello");
             }, 3000);
           }}
         >
           Logout
-        </Button> */}
+        </Button>
       </StyleModalView>
     );
   };
