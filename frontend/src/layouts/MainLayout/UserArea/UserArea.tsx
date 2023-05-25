@@ -333,8 +333,8 @@ const UserArea = (props: any) => {
     setCloseEditDob(false);
     setReadOnlyAddress(true);
     setCloseEditAddress(false);
-    setReadOnlyIntroduce(true);
-    setCloseEditIntroduce(false);
+    // setReadOnlyIntroduce(true);
+    // setCloseEditIntroduce(false);
     const data = {
       id: profile.id,
       username: profile.username,
