@@ -66,9 +66,13 @@ class UserController {
   }
   async getListChats(req: Request, res: Response) {
     try {
-      if (req.session.user == undefined)
-        return res.status(404).send({ message: "not logged in" });
-      const id = req.session.user;
+      const id = "#" + req.params.id_user;
+      const data = {
+        ...req.body,
+        id,
+      };
+      console.log(id);
+
       const listChats = await firebaseService.getListBoxChat(id);
       return res.send(listChats);
     } catch (err) {

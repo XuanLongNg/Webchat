@@ -57,6 +57,8 @@ export class FirebaseService {
   }
   public async getUrlById(key: string, id: string, url: string) {
     let data = await this.findData(key, id, url);
+    console.log(data);
+
     if (data)
       return (
         (url[url.length - 1] == "/" ? url : url + "/") + Object.keys(data)[0]
@@ -212,6 +214,8 @@ export class FirebaseService {
   }
   public async getListBoxChat(id: string): Promise<string[]> {
     let url = (await this.getUrlById("id", id, "/groupChats/")) + "/boxchat/";
+    console.log(url);
+
     let data = await this.database.ref(url).once("value");
     let arr = [];
     let keys = Object.keys(data.val());

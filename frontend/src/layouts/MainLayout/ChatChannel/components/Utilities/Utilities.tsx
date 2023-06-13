@@ -18,11 +18,11 @@ import Meta from "antd/es/card/Meta";
 import { Divider } from "antd";
 
 const BASE_URL = "http://localhost:4000";
-const Utilities = (props: any) => {
+const Utilities = () => {
   const [isModalSearchOpen, setIsModalSearchOpen] = useState(false);
   const [isModalUserOpen, setIsModalUserOpen] = useState(false);
 
-  const [idUser, setIdUser] = useState(props.idUser);
+  const [idUser, setIdUser] = useState(localStorage.id);
   const value: any = useRef("");
   const [ArrayUser, SetArrayUser] = useState([]);
   const [userProfile, setUserProfile] = useState({
@@ -105,7 +105,6 @@ const Utilities = (props: any) => {
               <div className="card-filter-blur-cover" />
               <Image
                 className="card-avatar"
-                // alt="avatar"
                 preview
                 src={user.information.image}
               />

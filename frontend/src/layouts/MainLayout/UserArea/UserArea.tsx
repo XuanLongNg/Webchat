@@ -23,10 +23,34 @@ import {
 } from "@ant-design/icons";
 import axios from "axios";
 import moment from "moment";
+import { onValue, ref } from "firebase/database";
 const BASE_URL = "http://localhost:4000";
 const UserArea = (props: any) => {
+  const firebase = props.firebase;
+  const [isLoading, setIsLoading] = useState(true);
+  const [profile, setProfile] = useState<userProfile>();
+
   console.log(props.user);
-  const [profile, setProfile] = useState<userProfile>(props.user);
+  useEffect(() => {
+    setIsLoading(true);
+    async function updateProfile() {
+      try {
+        const db = firebase.getDatabase();
+        const url =
+          (await firebase.getUrlByKey("id", localStorage.id, "/account")) +
+          "/information";
+        const starCountRef = ref(db, url);
+        onValue(starCountRef, (snapshot) => {
+          setProfile(snapshot.val());
+        });
+        setIsLoading(false);
+      } catch (err) {
+        console.log("Error: " + err);
+        throw err;
+      }
+    }
+    updateProfile();
+  }, []);
 
   const [isModalSendData, setIsModalSendData] = useState(false);
 

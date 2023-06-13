@@ -10,23 +10,9 @@ const Homepage = () => {
   const { url } = useParams<{ url: string }>();
   const checkLogin = () => {
     setIsLoading(true);
-    console.log(document.cookie);
-    const url_api = URL_SERVER + "/api/user";
-    axios
-      .post(url_api, { id: document.cookie })
-      .then((response) => {
-        console.log(response.data.message);
-        if (response.data.message === "logged") {
-          setIsLoggedIn(true);
-        } else {
-          setIsLoggedIn(false);
-        }
-        setIsLoading(false);
-      })
-      .catch((error) => {
-        console.error(error);
-        setIsLoading(false);
-      });
+    if (localStorage.id) setIsLoggedIn(true);
+    else setIsLoading(false);
+    setIsLoading(false);
   };
 
   useEffect(checkLogin, []);
@@ -34,12 +20,7 @@ const Homepage = () => {
   if (isLoading) {
     return <div>Loading...</div>;
   }
-  return (
-    <div>
-      {!isLoggedIn ? <Navigate to="/login" /> : <MainLayout />}
-      {/* <MainLayout /> */}
-    </div>
-  );
+  return <div>{!isLoggedIn ? <Navigate to="/login" /> : <MainLayout />}</div>;
 };
 
 export default Homepage;

@@ -1,0 +1,26 @@
+{
+  "rules": {
+    ".read": true,
+    ".write": "(auth!=null)",
+
+    "account": {
+      ".read": true,
+      ".write": "(auth!=null)",
+      ".indexOn": ["id"]
+    },
+    "friend": {
+      ".read": true,
+      ".write": "(auth!=null)",
+      ".indexOn": ["id"]
+    },
+    "groupChats": {
+      ".indexOn": ["id"]
+    },
+    "messages": {
+      ".indexOn": ["id"]
+    },
+    "groupChatsInfomation": {
+      ".indexOn": ["id"]
+    }
+  }
+}

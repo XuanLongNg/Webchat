@@ -13,7 +13,8 @@ class Client {
   }
 
   public async getListChats(): Promise<string[]> {
-    const url_api = URL_SERVER + "/api/user/getListChats";
+    const url_api =
+      URL_SERVER + "/api/user/getListChats/" + localStorage.id.substring(1);
     const response = await axios.get(url_api);
     this.listChat = response.data;
     return this.listChat;

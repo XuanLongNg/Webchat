@@ -16,7 +16,7 @@ const userController = UserController.getInstance();
 userRouter.post("/", userController.isLogin);
 userRouter.post("/login", userController.Login);
 userRouter.post("/register", userController.Register);
-userRouter.get("/getListChats", userController.getListChats);
+userRouter.get("/getListChats/:id_user", userController.getListChats);
 userRouter.post("/getInfoBoxChat", userController.getInfoBoxChat);
 userRouter.post("/getProfile", userController.getProfile);
 userRouter.post("/sendMessage", userController.sendMessage);
