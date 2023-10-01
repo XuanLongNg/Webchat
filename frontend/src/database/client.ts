@@ -3,8 +3,7 @@ import { infoBoxChat, message } from "../types/firebase";
 import { URL_SERVER } from "../constant";
 import FirebaseServiceClient from "../configs/firebaseConfig";
 import { equalTo, get, orderByChild, query, ref } from "firebase/database";
-const firebaseServiceClient = new FirebaseServiceClient();
-class Client {
+export class Client {
   public listChat: string[];
   public message: message[];
   public constructor() {
@@ -52,7 +51,7 @@ class Client {
     console.log(response.data);
   }
   public async getMessageClient(id: string): Promise<message[]> {
-    const database = firebaseServiceClient.getDatabase();
+    const database = FirebaseServiceClient.getDatabase();
     if (database) {
       try {
         const dbRef = ref(database, "/messages/");
@@ -87,4 +86,5 @@ class Client {
     return [];
   }
 }
-export default Client;
+const client = new Client();
+export default client;

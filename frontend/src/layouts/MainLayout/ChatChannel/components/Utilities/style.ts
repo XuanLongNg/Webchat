@@ -2,6 +2,11 @@ import styled from "styled-components";
 import colors from "../../../../../styles/color";
 import { Modal } from "antd";
 export const StyleModalSearch = styled(Modal)`
+  .group-search {
+    .input-search {
+      /* width: 100px; */
+    }
+  }
   .list-user {
     max-height: 300px;
     overflow-x: hidden;
@@ -46,10 +51,14 @@ export const StyleModalView = styled(Modal)`
 `;
 const Style = styled.div`
   align-items: center;
-  height: calc((100% / 9));
-  width: 100%;
+  height: 10vh;
+  width: calc(100%-0.5em);
   padding: 0 5%;
-  background-color: ${colors.light_blue_color};
+  margin-right: 0.5em;
+  background-color: ${colors.pink};
+  /* border-top-right-radius: 5px; */
+  border-bottom-right-radius: 5px;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
 
   .search {
     /* font:  */
@@ -57,18 +66,32 @@ const Style = styled.div`
     btn {
       background-color: ${colors.white};
     }
+    input {
+      &:focus {
+        /* border-color: #fe8680; */
+        /* box-shadow: 0 0 0 0.25rem #fe8680; */
+      }
+    }
   }
   .find-user-btn,
   .find-gr-btn {
-    color: ${colors.text_with_orange};
-    width: 10%;
-    height: 40%;
-    margin: 0 2.5%;
+    color: ${colors.pink};
+    background-color: white;
+    padding: 4px 6px;
+    height: auto;
+    margin-left: 2.5%;
     display: flex;
     justify-content: center;
     align-items: center;
     border: none;
+    transition: all 0.5s ease;
     border-radius: 5px;
+    border: 2px solid white !important;
+
+    &:hover {
+      background-color: ${colors.pink}!important;
+      color: white !important;
+    }
   }
 `;
 export default Style;

@@ -37,6 +37,13 @@ export interface Account {
     image: string;
   };
 }
+export interface MessageData {
+  [key: string]: {
+    time: string;
+    body: string;
+    user: string;
+  };
+}
 export interface Message {
   id: string;
   message: {

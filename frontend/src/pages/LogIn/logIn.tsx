@@ -1,9 +1,10 @@
 import React, { useState } from "react";
-import { Button, Form, Input, notification, Divider } from "antd";
+import { Form, Input, notification, Divider } from "antd";
 import Style from "./style";
 import axios from "axios";
 import { Navigate } from "react-router-dom";
 import { URL_SERVER } from "../../constant";
+import Button from "../../utils/button";
 interface LoginFormData {
   username: string;
   password: string;
@@ -12,7 +13,7 @@ interface LoginFormData {
 type NotificationType = "success" | "error";
 
 const Login = () => {
-  const [isLogin, SetIsLogin] = useState(false);
+  const [isLogin, setIsLogin] = useState(false);
 
   const onFinish = (values: any) => {
     const data: LoginFormData = {
@@ -31,13 +32,13 @@ const Login = () => {
           notification.success({
             message: "Login complete",
           });
-          SetIsLogin(true);
+          setIsLogin(true);
           return;
         } else {
           notification.error({
             message: "User or password incorrect",
           });
-          SetIsLogin(false);
+          setIsLogin(false);
           return;
         }
       })
@@ -50,8 +51,8 @@ const Login = () => {
     // console.log("Failed:", errorInfo);
   };
 
-  return isLogin ? (
-    <Navigate to="/" />
+  return isLogin == true ? (
+    <Navigate to="/message" />
   ) : (
     <Style>
       <div className="container">
@@ -94,18 +95,23 @@ const Login = () => {
           </Form.Item>
 
           <Form.Item wrapperCol={{ span: 24 }}>
-            <Button className="btn" type="primary" htmlType="submit">
-              Submit
-            </Button>
+            <Button
+              type="primary"
+              htmlType="submit"
+              content="Submit"
+              className="btn-login"
+            />
           </Form.Item>
           <Form.Item wrapperCol={{ span: 24 }}>
             <Divider style={{ borderColor: "white", color: "white" }}>
               or
             </Divider>
             <a href="/register">
-              <Button className="btn" type="primary">
-                Register
-              </Button>
+              <Button
+                content="Register"
+                type="primary"
+                className="btn-register"
+              />
             </a>
           </Form.Item>
         </Form>

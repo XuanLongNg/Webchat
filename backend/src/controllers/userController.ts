@@ -154,6 +154,10 @@ class UserController {
       const data = {
         ...req.body,
       };
+      console.log("Small", data);
+      if (data.id === undefined)
+        return res.status(400).send({ message: "not found" });
+
       const result = await firebaseService.getSmallInformation(data.id);
       return res.status(200).send(result);
     } catch (error) {

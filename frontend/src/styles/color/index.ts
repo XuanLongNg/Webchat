@@ -13,6 +13,7 @@ class Color {
   public text_with_orange = "#0B0E16";
   public black_blue_color = "#0a0d13";
   public light_blue_color = "#172849";
+  public pink = "#FE8680";
 }
 const colors = new Color();
 export default colors;

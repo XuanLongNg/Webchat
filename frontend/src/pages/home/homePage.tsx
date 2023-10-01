@@ -20,6 +20,7 @@ const Homepage = () => {
   if (isLoading) {
     return <div>Loading...</div>;
   }
+  // return <MainLayout />;
   return <div>{!isLoggedIn ? <Navigate to="/login" /> : <MainLayout />}</div>;
 };
 

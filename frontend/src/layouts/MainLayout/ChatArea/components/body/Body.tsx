@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { message } from "../../../../../types/firebase";
+import { MessageData, message } from "../../../../../types/firebase";
 import Style from "./style";
 import { onValue, ref } from "firebase/database";
 import axios from "axios";
@@ -10,13 +10,21 @@ interface SmallInformation {
   name: string;
   image: string;
 }
-const Body = (props: any) => {
-  const firebaseConfig = props.firebaseConfig;
-
+const Body = ({
+  firebaseConfig,
+  sender,
+  recipient = undefined,
+  messages,
+}: {
+  firebaseConfig: any;
+  sender: string;
+  recipient: string | undefined;
+  messages: MessageData[];
+}) => {
   const scrollableRef = useRef<HTMLDivElement>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [id, setId] = useState(props.recipient);
-  const [data, setData] = useState<message[]>([]);
+  const [id] = useState(recipient);
+  const [data, setData] = useState<MessageData[]>(messages);
   const [idMember, setIdMember] = useState("");
   const [dataMember, setDataMember] = useState<SmallInformation[]>([]);
   const scrollToEnd = () => {
@@ -28,11 +36,19 @@ const Body = (props: any) => {
     }
   };
   useEffect(() => {
+    messages.sort((a, b) => {
+      return (
+        parseInt(Object.keys(a)[0].slice(1)) -
+        parseInt(Object.keys(b)[0].slice(1))
+      );
+    });
+    // console.log("MEs", messages);
     if (scrollableRef.current) {
       scrollableRef.current.scrollTop =
         scrollableRef.current.scrollHeight - scrollableRef.current.clientHeight;
     }
     async function get() {
+      setIsLoading(true);
       try {
         const db = firebaseConfig.getDatabase();
         const url =
@@ -41,7 +57,7 @@ const Body = (props: any) => {
         const starCountRef = ref(db, url);
         onValue(starCountRef, (snapshot) => {
           const data = snapshot.val();
-          console.log(data);
+          // console.log(data);
           const arr = [];
           const keys = Object.keys(data);
           for (let i of keys) {
@@ -59,9 +75,12 @@ const Body = (props: any) => {
         throw err;
       }
     }
-    get();
-  }, []);
+    // get();
+    setIsLoading(false);
+  }, [isLoading]);
   const searchInformation = (id: string) => {
+    // console.log("Id", id);
+
     for (let i of dataMember) {
       if (i.id === id) {
         return i;
@@ -88,7 +107,7 @@ const Body = (props: any) => {
         BASE_URL + "/api/user/getSmallInformation",
         { id: id }
       );
-      console.log("response: ", response);
+      // console.log("response: ", response);
       const arr: SmallInformation[] = dataMember;
       arr.push(response.data);
       setDataMember(arr);
@@ -97,29 +116,40 @@ const Body = (props: any) => {
       console.log(error);
     }
   };
-  const idUser = props.sender;
-  if (isLoading) return <p>Loading</p>;
+  if (!messages) return <p>Loading</p>;
 
   return (
     <Style className="scroll-bar" ref={scrollableRef} onLoad={scrollToEnd}>
       <div>
-        <div className="start-chat">Start chat</div>
-        {data.map((message: any) => {
-          const data = searchInformation(message.user);
-          console.log("Find data: ", data);
-          formatDate(message.time);
-          if (idMember == data?.id) {
-            return <p>{message.body}</p>;
-          } else {
+        <div className="start-chat"></div>
+        {messages.map((message: MessageData) => {
+          const mes = message[Object.keys(message)[0]];
+          const data = searchInformation(mes.user);
+          // formatDate(message[Object.keys(message)[0]].time);
+
+          if (data?.id && idMember == data.id) {
+            // setIdMember(data.id);
+            return <p key={data?.id + data?.image}>{mes.body}</p>;
+          } else if (data?.id && idMember != data.id) {
+            // setIdMember(data.id);
             return (
-              <div className="box-chat-item d-flex flex-row">
+              <div
+                key={Object.keys(message)[0]}
+                className="box-chat-item d-flex flex-row"
+              >
                 <img className="img" src={data?.image} alt="" />
                 <div>
                   <div className="header-message">
-                    <p className="name">{data?.name}</p>
-                    <p className="time">{formatDate(message.time)}</p>
+                    <p className="name">
+                      {data?.id == localStorage.id ? (
+                        <span>{data?.name}</span>
+                      ) : (
+                        data?.name
+                      )}
+                    </p>
+                    <p className="time">{formatDate(mes.time)}</p>
                   </div>
-                  <p className="body">{message.body}</p>
+                  <p className="body">{mes.body}</p>
                 </div>
               </div>
             );

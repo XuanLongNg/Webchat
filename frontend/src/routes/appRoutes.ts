@@ -6,6 +6,8 @@ export class AppRoutes {
   static COMING_SOON = "/coming-soon";
   static URL = "/:url";
   static MESSAGE = "/message/:message";
+  static MESSAGE_BASE = "/message";
+
   /**
    * It checks if the route is an error route.
    * @param {string} route - The route to check

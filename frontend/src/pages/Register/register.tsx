@@ -1,13 +1,5 @@
 import React, { useState } from "react";
-import {
-  Button,
-  Form,
-  Input,
-  DatePicker,
-  Upload,
-  notification,
-  Divider,
-} from "antd";
+import { Form, Input, DatePicker, Upload, notification, Divider } from "antd";
 import Style from "./style";
 import axios from "axios";
 import { Navigate } from "react-router-dom";
@@ -16,9 +8,12 @@ import TextArea from "antd/es/input/TextArea";
 import type { RcFile } from "antd/es/upload/interface";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { v4 as uuidv4 } from "uuid";
-import FirebaseServiceClient from "../../configs/firebaseConfig";
+import Firebase from "../../configs/firebaseConfig";
 import moment from "moment";
-const firebaseServiceClient = new FirebaseServiceClient();
+import Button from "../../utils/button";
+import "../../styles/scrollbar/index.css";
+
+// const Firebase = new FirebaseServiceClient();
 interface RegisterFormData {
   username: string;
   password: string;
@@ -47,7 +42,7 @@ const Register = () => {
     // return;
     const uniqueFilename = `${uuidv4()}_${image.name}`;
 
-    const storageRef = ref(firebaseServiceClient.getStorage(), uniqueFilename);
+    const storageRef = ref(Firebase.getStorage(), uniqueFilename);
 
     // 'file' comes from the Blob or File API
     const metadata = {
@@ -122,109 +117,122 @@ const Register = () => {
           <Form.Item className="container-header d-flex justify-content-center align-items-center">
             <h1>Register</h1>
           </Form.Item>
-          <Form.Item
-            className="input"
-            label={<span style={{ color: "#fff" }}>Username</span>}
-            name="username"
-            wrapperCol={{ span: 24 }}
-            rules={[{ required: true, message: "Please input your username!" }]}
-            colon={false}
-            required={false}
-          >
-            <Input />
-          </Form.Item>
+          <Form.Item className="d-flex flex-column">
+            <Form.Item>
+              <Form.Item
+                className="input"
+                label={<span style={{ color: "#fff" }}>Username</span>}
+                name="username"
+                wrapperCol={{ span: 24 }}
+                rules={[
+                  { required: true, message: "Please input your username!" },
+                ]}
+                colon={false}
+                required={false}
+              >
+                <Input />
+              </Form.Item>
 
-          <Form.Item
-            className="input"
-            label={<span style={{ color: "#fff" }}>Password</span>}
-            name="password"
-            wrapperCol={{ span: 24 }}
-            rules={[{ required: true, message: "Please input your password!" }]}
-            colon={false}
-            required={false}
-          >
-            <Input.Password />
-          </Form.Item>
+              <Form.Item
+                className="input"
+                label={<span style={{ color: "#fff" }}>Password</span>}
+                name="password"
+                wrapperCol={{ span: 24 }}
+                rules={[
+                  { required: true, message: "Please input your password!" },
+                ]}
+                colon={false}
+                required={false}
+              >
+                <Input.Password />
+              </Form.Item>
 
-          <Form.Item
-            className="input"
-            label={<span style={{ color: "#fff" }}>First name</span>}
-            name="fname"
-            wrapperCol={{ span: 24 }}
-            rules={[
-              { required: true, message: "Please input your first name!" },
-            ]}
-            colon={false}
-            required={false}
-          >
-            <Input />
-          </Form.Item>
-          <Form.Item
-            className="input"
-            label={<span style={{ color: "#fff" }}>Last name</span>}
-            name="lname"
-            wrapperCol={{ span: 24 }}
-            rules={[
-              { required: true, message: "Please input your last name!" },
-            ]}
-            colon={false}
-            required={false}
-          >
-            <Input />
-          </Form.Item>
-          <Form.Item
-            //   label="Date of birth"
-            label={<span style={{ color: "#fff" }}>Date of birth</span>}
-            name="dob"
-          >
-            <DatePicker format={"YYYY/MM/DD"} />
-          </Form.Item>
-          <Form.Item
-            className="input"
-            label={<span style={{ color: "#fff" }}>Address</span>}
-            name="address"
-            wrapperCol={{ span: 24 }}
-            rules={[{ required: true, message: "Please input your address!" }]}
-            colon={false}
-            required={false}
-          >
-            <Input />
-          </Form.Item>
-          <Form.Item
-            label={<span style={{ color: "#fff" }}>Introduce</span>}
-            name="introduce"
-          >
-            <TextArea rows={4} />
-          </Form.Item>
-          <Form.Item
-            name="image"
-            label={<span style={{ color: "#fff" }}>Avatar</span>}
-          >
-            <Upload
-              beforeUpload={(file) => {
-                handleFileUpload(file);
-                return false; // Prevent automatic upload
-              }}
-              listType="picture-card"
-            >
-              <div>
-                <div style={{ marginTop: 8 }}>Upload</div>
-              </div>
-            </Upload>
+              <Form.Item
+                className="input"
+                label={<span style={{ color: "#fff" }}>First name</span>}
+                name="fname"
+                wrapperCol={{ span: 24 }}
+                rules={[
+                  { required: true, message: "Please input your first name!" },
+                ]}
+                colon={false}
+                required={false}
+              >
+                <Input />
+              </Form.Item>
+              <Form.Item
+                className="input"
+                label={<span style={{ color: "#fff" }}>Last name</span>}
+                name="lname"
+                wrapperCol={{ span: 24 }}
+                rules={[
+                  { required: true, message: "Please input your last name!" },
+                ]}
+                colon={false}
+                required={false}
+              >
+                <Input />
+              </Form.Item>
+            </Form.Item>
+            <Form.Item>
+              <Form.Item
+                //   label="Date of birth"
+                label={<span style={{ color: "#fff" }}>Date of birth</span>}
+                name="dob"
+              >
+                <DatePicker format={"YYYY/MM/DD"} />
+              </Form.Item>
+              <Form.Item
+                className="input"
+                label={<span style={{ color: "#fff" }}>Address</span>}
+                name="address"
+                wrapperCol={{ span: 24 }}
+                rules={[
+                  { required: true, message: "Please input your address!" },
+                ]}
+                colon={false}
+                required={false}
+              >
+                <Input />
+              </Form.Item>
+              <Form.Item
+                label={<span style={{ color: "#fff" }}>Introduce</span>}
+                name="introduce"
+              >
+                <TextArea rows={4} />
+              </Form.Item>
+              <Form.Item
+                name="image"
+                label={<span style={{ color: "#fff" }}>Avatar</span>}
+              >
+                <Upload
+                  beforeUpload={(file) => {
+                    handleFileUpload(file);
+                    return false; // Prevent automatic upload
+                  }}
+                  listType="picture-card"
+                >
+                  <div>
+                    <div style={{ marginTop: 8 }}>Upload</div>
+                  </div>
+                </Upload>
+              </Form.Item>
+            </Form.Item>
           </Form.Item>
           <Form.Item wrapperCol={{ span: 24 }}>
-            <Button className="btn" type="primary" htmlType="submit">
-              Submit
-            </Button>
+            <Button
+              type="primary"
+              htmlType="submit"
+              content="Submit"
+              className="btn-register"
+            />
           </Form.Item>
           <Form.Item wrapperCol={{ span: 24 }}>
             <Divider style={{ borderColor: "white", color: "white" }}>
               or
             </Divider>
             <a href="/login">
-              <Button className="btn" type="primary">
-                Register
-              </Button>
+              <Button type="primary" content="Login" className="btn-login" />
             </a>
           </Form.Item>
         </Form>

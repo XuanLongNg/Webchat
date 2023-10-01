@@ -2,13 +2,13 @@ import styled from "styled-components";
 import colors from "../../styles/color";
 
 const Style = styled.div`
-  background-color: ${colors.black_blue_color};
+  background: ${colors.black_blue_color} url("/k.png") no-repeat center/cover;
   height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
   .container {
-    background-color: ${colors.light_blue_color};
+    background-color: rgba(0, 0, 0, 0.5);
     height: 35em;
     width: 22em;
     border-radius: 10px;
@@ -20,16 +20,9 @@ const Style = styled.div`
     .input {
       width: 100%;
     }
-    .btn {
-      margin-top: 1em;
+    .btn-login,
+    .btn-register {
       width: 100%;
-      background-color: ${colors.black_blue_color};
-      color: ${colors.white};
-      height: 2.5em;
-    }
-    .btn:hover {
-      background-color: ${colors.white};
-      color: ${colors.black_blue_color};
     }
   }
 `;

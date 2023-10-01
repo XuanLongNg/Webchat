@@ -12,37 +12,27 @@ import {
 import { MainStructure, Message, keyFirebase } from "../types/firebase";
 import System from "../database/system";
 import { getStorage } from "firebase/storage";
-const system = new System();
-class FirebaseServiceClient {
+// const system = new System();
+const KEY_FIREBASE = {
+  apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
+  authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
+  databaseURL: process.env.REACT_APP_FIREBASE_DATABASE_URl,
+  projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID,
+  storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID,
+  appId: process.env.REACT_APP_FIREBASE_APP_ID,
+  measurementId: process.env.REACT_APP_FIREBASE_MEASUREMENT_ID,
+};
+export class FirebaseServiceClient {
   private app: any;
   // FirebaseApp | null;
   private database: any;
   // Database | null;
   private storage: any;
   public constructor() {
-    this.app = null;
-    this.database = null;
-    this.storage = null;
-    system
-      .getKeyFirebase()
-      .then((keyFirebase) => {
-        let key: keyFirebase | undefined = keyFirebase;
-        const firebaseConfig = {
-          apiKey: key ? key.DB_API_KEY : "",
-          authDomain: key ? key.DB_AUTH_DOMAIN : "",
-          databaseURL: key ? key.DB_DATABASE_URL : "",
-          projectId: key ? key.DB_PROJECT_ID : "",
-          storageBucket: key ? key.DB_STORAGE_BUCKET : "",
-          messagingSenderId: key ? key.DB_MESSAGE_SENDER : "",
-          appId: key ? key.DB_APP_ID : "",
-          measurementId: key ? key.DB_MEASUREMENT_ID : "",
-        };
-
-        this.app = initializeApp(firebaseConfig);
-        this.database = getDatabase(this.app);
-        this.storage = getStorage(this.app);
-      })
-      .catch((err) => console.log(err));
+    this.app = initializeApp(KEY_FIREBASE);
+    this.database = getDatabase(this.app);
+    this.storage = getStorage(this.app);
   }
   public getDatabase() {
     return this.database;
@@ -118,4 +108,6 @@ class FirebaseServiceClient {
     }
   }
 }
-export default FirebaseServiceClient;
+const firebase = new FirebaseServiceClient();
+
+export default firebase;

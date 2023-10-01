@@ -6,23 +6,25 @@ const Style = styled.div`
   height: 80vh;
   width: 100%;
   padding: 0 1%;
-  background-color: ${colors.black_blue_color};
+  /* background-color: ${colors.black_blue_color}; */
   overflow-x: hidden;
   overflow-y: scroll;
   .start-chat {
     display: flex;
     justify-content: center;
-    padding: 2em;
-    border-bottom: 1px solid gray;
+    padding: 0.5em;
+    /* border-bottom: 1px solid gray; */
     width: 80%;
     margin: 0px auto 2em;
     text-transform: uppercase;
-    color: white;
+    color: black;
   }
   .box-chat-item {
     align-items: center;
     //   background-color: ${colors.orange};
-    color: ${colors.white};
+    /* color: ${colors.white}; */
+    color: black;
+
     width: 90%;
     margin: 0 0 1em;
     overflow: hidden;
@@ -50,6 +52,9 @@ const Style = styled.div`
           font-size: 14px;
           margin: 0px 7px 1px 0px;
           font-weight: bold;
+          span {
+            color: ${colors.pink};
+          }
         }
         .time {
           height: 1.4em;

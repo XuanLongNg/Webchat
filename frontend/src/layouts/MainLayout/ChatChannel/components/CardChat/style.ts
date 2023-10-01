@@ -1,20 +1,18 @@
 import styled from "styled-components";
 import colors from "../../../../../styles/color";
+import { Link } from "react-router-dom";
 
-const Style = styled.a`
+const Style = styled(Link)`
   height: 100%;
-  width: 100%;
-  background-color: ${colors.black_blue_color};
-  transition: background-color 0.4s ease;
-  transition: box-shadow 0.4s ease;
+  width: 95%;
+  background-color: ${colors.pink};
+  border-radius: 0;
+  border-top-right-radius: 30px;
+  border-bottom-right-radius: 30px;
+  transition: all 0.4s ease;
 
-  /* box-shadow: 0 23px 23px #3b464d inset, 0 -23px 23px #3b464d inset; */
-  display: flex;
-  justify-content: center;
-  align-items: center;
   padding: 0;
   text-decoration: none;
-  border-bottom: 1px solid gray;
   .box-chat-item {
     align-items: center;
     //   background-color: ${colors.orange};
@@ -49,12 +47,10 @@ const Style = styled.a`
       }
     }
   }
-  &:hover,
-  &:active {
-    color: ${colors.white};
-    /* background-color: #cccccc7e; */
-    box-shadow: 0px -11px 9px -5px rgba(204, 204, 204, 0.494) inset,
-      0px 11px 11px -6px rgba(204, 204, 204, 0.494) inset;
+  &:hover {
+    width: 100%;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
   }
 `;
 

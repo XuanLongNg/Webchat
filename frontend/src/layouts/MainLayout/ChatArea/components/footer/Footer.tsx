@@ -1,56 +1,56 @@
-import { Button, Form, Input } from "antd";
+import { Form, Input } from "antd";
 import { message } from "../../../../../types/firebase";
 import Style from "./style";
+import Button from "../../../../../utils/button";
+import { SendOutlined } from "@ant-design/icons";
+import { useEffect, useRef, useState } from "react";
 
-const Footer = (props: any) => {
-  // console.log("Message", props);
-  const client = props.client;
-  const onFinish = (values: any) => {
-    if (!values.message) return;
+const Footer = ({
+  client,
+  sender,
+  recipient = undefined,
+}: {
+  client: any;
+  sender: string;
+  recipient: string | undefined;
+}) => {
+  const [inputValue, setInputValue] = useState("");
+  const onClick = async () => {
+    if (!inputValue) return;
     const data: message = {
-      sender: props.sender,
+      sender: sender,
       time: new Date().toString(),
-      body: values.message,
+      body: inputValue,
     };
-    // console.log(data);
-
-    client
-      .sendMessage(props.recipient, data)
-      .then()
-      .catch((err: any) => console.log(err));
-    // console.log("Success:", values);
+    try {
+      setInputValue("");
+      await client.sendMessage(recipient, data);
+    } catch (err) {
+      console.log(err);
+      throw err;
+    }
   };
-
-  const onFinishFailed = (errorInfo: any) => {
-    console.log("Failed:", errorInfo);
+  const handleEnterKeyPress = (e: any) => {
+    if (e.key === "Enter") {
+      // Gọi hàm xử lý gửi dữ liệu ở đây
+      onClick();
+    }
   };
   return (
-    <Style>
-      <Form
-        name="basic"
-        labelCol={{ span: 32 }}
-        wrapperCol={{ span: 32 }}
-        style={{ width: "100%" }}
-        initialValues={{ remember: true }}
-        onFinish={onFinish}
-        onFinishFailed={onFinishFailed}
-        autoComplete="off"
-        layout="inline"
-      >
-        <Form.Item
-          wrapperCol={{ span: 24 }}
-          name="message"
-          //   rules={[{ required: true, message: "Enter your message!" }]}
-        >
-          <Input className="input" />
-        </Form.Item>
-
-        <Form.Item wrapperCol={{ span: 16 }}>
-          <Button type="primary" htmlType="submit">
-            Submit
-          </Button>
-        </Form.Item>
-      </Form>
+    <Style className="d-flex justify-content-center align-items-center">
+      <Input
+        className="input"
+        value={inputValue}
+        onChange={(e) => setInputValue(e.target.value)}
+        onKeyDown={handleEnterKeyPress}
+      />
+      <Button
+        type="primary"
+        htmlType="submit"
+        content={<SendOutlined rev="" />}
+        className="btn-submit"
+        onClick={onClick}
+      />
     </Style>
   );
 };

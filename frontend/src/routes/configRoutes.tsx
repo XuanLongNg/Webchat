@@ -14,8 +14,8 @@ type ConfigRoute = RouteObject & RouteProperties;
 
 export const ConfigRoutes: ConfigRoute[] = [
   {
-    element: <Homepage />,
-    path: AppRoutes.URL,
+    element: <Navigate to={AppRoutes.MESSAGE} />,
+    path: AppRoutes.HOME,
     index: true,
   },
   {
@@ -29,7 +29,11 @@ export const ConfigRoutes: ConfigRoute[] = [
   {
     element: <Message />,
     path: AppRoutes.MESSAGE,
-    layout: MainLayout,
+    // layout: MainLayout,
+  },
+  {
+    element: <Navigate to={AppRoutes.MESSAGE} />,
+    path: AppRoutes.MESSAGE_BASE,
   },
   {
     path: "*",

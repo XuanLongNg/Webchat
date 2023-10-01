@@ -1,11 +1,17 @@
-import { infoBoxChat } from "../../../../../types/firebase";
+import { useParams } from "react-router";
+import { infoBoxChat, message } from "../../../../../types/firebase";
 import Style from "./style";
+import clsx from "clsx";
 
-const ChatBox = (props: any) => {
-  const box: infoBoxChat = props.box;
-  const nav = "/" + box.id;
+const ChatBox = ({ box }: { box: infoBoxChat }) => {
+  const nav = "/message/" + box.id;
+  const { message } = useParams();
+  const classActive = clsx("d-flex justify-content-center align-items-center", {
+    ["active"]: message == box.id,
+  });
+
   const layout = (
-    <Style href={nav}>
+    <Style className={classActive} to={nav}>
       <div className="box-chat-item d-flex flex-row">
         <img className="img" src={box.image} alt="" />
         <div>

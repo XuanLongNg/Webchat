@@ -3,6 +3,7 @@ import { ConfigRoutes } from "./routes/configRoutes";
 // import 'slick-carousel/slick/slick-theme.css';
 // import 'slick-carousel/slick/slick.css';
 import "antd/dist/reset.css";
+import "./styles/scrollbar/index.css";
 
 function App() {
   //  ** animation initialization
