@@ -36,6 +36,8 @@ const Register = () => {
     reader.addEventListener("load", () => callback(reader.result as string));
     reader.readAsDataURL(img);
   };
+  const [isNavigate, setIsNavigate] = useState(false);
+
   const onFinish = (values: any) => {
     setIsRegisted(false);
     // console.log(moment(values.dob.$d).format("YYYY/MM/DD"));
@@ -98,6 +100,8 @@ const Register = () => {
   const handleFileUpload = (file: any) => {
     setImage(file);
   };
+  if (isNavigate) return <Navigate to="/login" />;
+
   return isRegisted ? (
     <Navigate to="/login" />
   ) : (
@@ -231,9 +235,12 @@ const Register = () => {
             <Divider style={{ borderColor: "white", color: "white" }}>
               or
             </Divider>
-            <a href="/login">
-              <Button type="primary" content="Login" className="btn-login" />
-            </a>
+            <Button
+              type="primary"
+              content="Login"
+              className="btn-login"
+              onClick={() => setIsNavigate(true)}
+            />
           </Form.Item>
         </Form>
       </div>

@@ -1,7 +1,7 @@
 import Style from "./style";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import { useParams } from "react-router-dom";
-import { infoBoxChat, message } from "../../../types/firebase";
+import { MessageData, infoBoxChat, message } from "../../../types/firebase";
 import client from "../../../database/client";
 import Firebase from "../../../configs/firebaseConfig";
 import Body from "./components/body/Body";
@@ -11,26 +11,34 @@ import { RootState } from "../../../hooks/redux/store";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { Dispatch } from "redux";
-import {
-  ADD,
-  DELETE,
-  addMessage,
-} from "../../../hooks/redux/messages/messagesActions";
+// import {
+//   ADD,
+//   DELETE,
+//   addMessage,
+// } from "../../../hooks/redux/messages/messagesActions";
 import { useEffect, useState } from "react";
 import { onValue, ref } from "firebase/database";
+import {
+  TADD_MESSAGE,
+  addMessage,
+} from "../../../hooks/redux/boxes/boxesActions";
 
-// const firebaseConfig = new FirebaseConfig();
-// const client = new Client();
-
-const ChatArea = ({ boxes }: { boxes: infoBoxChat[] }) => {
+const ChatArea = ({
+  boxes,
+}: {
+  boxes: { info: infoBoxChat; messages: MessageData[] }[];
+}) => {
   const { message } = useParams<{ message: string }>();
-  const checkUrl = (box: infoBoxChat) => {
-    return box.id == message;
+  const checkUrl = (box: { info: infoBoxChat; messages: MessageData[] }) => {
+    return box.info.id == message;
   };
-  const { messages } = useSelector((state: RootState) => state.messages);
-  const dispatch = useDispatch<Dispatch<ADD | DELETE>>();
+  // const { boxes } = useSelector((state: RootState) => state.boxes);
+  const dispatch = useDispatch<Dispatch<TADD_MESSAGE | TADD_MESSAGE>>();
   const [isLoading, setIsLoading] = useState(false);
-
+  const [searchBy, setSearchBy] = useState("");
+  const onSearch = (value: string) => {
+    setSearchBy(value);
+  };
   let box = boxes.find(checkUrl);
   useEffect(() => {
     const getMessages = async () => {
@@ -51,11 +59,7 @@ const ChatArea = ({ boxes }: { boxes: infoBoxChat[] }) => {
           const keys = Object.keys(data);
           for (let i of keys) {
             if (i == "number") continue;
-            dispatch(
-              addMessage({
-                [i]: data[i],
-              })
-            );
+            dispatch(addMessage({ [i]: data[i] }, box?.info));
           }
         });
         setIsLoading(false);
@@ -68,13 +72,8 @@ const ChatArea = ({ boxes }: { boxes: infoBoxChat[] }) => {
   }, [message]);
   return (
     <Style>
-      <Header box={box} />
-      <Body
-        firebaseConfig={Firebase}
-        sender={localStorage.id}
-        recipient={message}
-        messages={messages}
-      />
+      <Header box={box} onSearch={onSearch} />
+      <Body filter={searchBy} recipient={message} messages={box?.messages} />
       <Footer sender={localStorage.id} client={client} recipient={message} />
     </Style>
   );

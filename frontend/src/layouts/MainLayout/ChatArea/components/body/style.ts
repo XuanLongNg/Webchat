@@ -3,12 +3,13 @@ import colors from "../../../../../styles/color/index";
 
 const Style = styled.div`
   align-items: center;
-  height: 80vh;
+  height: calc(80vh - 2px);
   width: 100%;
   padding: 0 1%;
-  /* background-color: ${colors.black_blue_color}; */
+  border-radius: 5px;
   overflow-x: hidden;
   overflow-y: scroll;
+  margin: 1px 0;
   .start-chat {
     display: flex;
     justify-content: center;
@@ -23,7 +24,7 @@ const Style = styled.div`
     align-items: center;
     //   background-color: ${colors.orange};
     /* color: ${colors.white}; */
-    color: black;
+    color: white;
 
     width: 90%;
     margin: 0 0 1em;
@@ -33,6 +34,7 @@ const Style = styled.div`
       height: 2em;
       border-radius: 50%;
       margin: 0 1em;
+      border: 2px solid ${colors.white};
     }
     div {
       height: 100%;

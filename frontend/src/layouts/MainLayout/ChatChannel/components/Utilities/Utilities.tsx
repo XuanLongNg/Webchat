@@ -10,7 +10,7 @@ import ModalAddFriend from "./components/ModalAddFriend";
 import Button from "../../../../../utils/button";
 
 const BASE_URL = "http://localhost:4000";
-const Utilities = () => {
+const Utilities = ({ updateFilter }: { updateFilter: Function }) => {
   const [isModalSearchOpen, setIsModalSearchOpen] = useState(false);
   const [isModalUserOpen, setIsModalUserOpen] = useState(false);
 
@@ -100,6 +100,9 @@ const Utilities = () => {
           className="form-control bi bi-search"
           type="text"
           placeholder=" Search"
+          onChange={(e) => {
+            updateFilter(e.target.value);
+          }}
         />
       </div>
       <Button

@@ -28,6 +28,7 @@ export default styled.div`
       align-items: center;
       .avatar-card {
         margin: 0 1em;
+        border: 2px solid ${colors.white};
       }
       .body-card {
         /* padding: 0 0.5em; */

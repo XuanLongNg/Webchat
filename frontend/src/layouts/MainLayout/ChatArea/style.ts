@@ -5,6 +5,7 @@ const Style = styled.div`
   //   position: absolute;
   left: 0;
   top: 0;
+
   /* background-color: ${colors.gray}; */
   width: 100%;
   height: 100%;

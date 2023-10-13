@@ -19,7 +19,7 @@ const Style = styled.div`
     }
   }
   .active {
-    width: 100%;
+    width: 99%;
     border-top-right-radius: 5px;
     border-bottom-right-radius: 5px;
   }

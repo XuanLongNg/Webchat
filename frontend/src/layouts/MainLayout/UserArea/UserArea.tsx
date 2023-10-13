@@ -43,7 +43,7 @@ const UserArea = ({ firebase }: { firebase: FirebaseServiceClient }) => {
   };
   const showModalUser = () => {
     setIsModalUserOpen(true);
-    console.log(data);
+    // console.log(data);
   };
   const handleOkUserModal = () => {
     setIsModalUserOpen(false);

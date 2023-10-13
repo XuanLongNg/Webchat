@@ -71,8 +71,6 @@ class UserController {
         ...req.body,
         id,
       };
-      console.log(id);
-
       const listChats = await firebaseService.getListBoxChat(id);
       return res.send(listChats);
     } catch (err) {
@@ -82,7 +80,6 @@ class UserController {
   }
   async getInfoBoxChat(req: Request, res: Response) {
     try {
-      console.log(req.body.id);
       const info = await firebaseService.getInfoBoxChat(req.body.id);
       if (info) return res.send(info);
       return res.status(403).send({ message: "Box chat doesn't exits" });
@@ -113,7 +110,6 @@ class UserController {
         ...req.body,
       };
       let message = await firebaseService.getMessage(data.id);
-      console.log(message);
 
       if (message) return res.status(200).send(message);
       return res.status(403).send({ message: "Box chat doesn't exits" });
@@ -126,10 +122,8 @@ class UserController {
       const data = {
         ...req.body,
       };
-      console.log("Data: ", data);
 
       const hasFriend = await firebaseService.hasFriend(data);
-      console.log(hasFriend);
 
       if (hasFriend) return res.status(200).send({ result: "rejected" });
       await firebaseService.addFriend(data);
@@ -154,7 +148,6 @@ class UserController {
       const data = {
         ...req.body,
       };
-      console.log("Small", data);
       if (data.id === undefined)
         return res.status(400).send({ message: "not found" });
 
@@ -170,8 +163,6 @@ class UserController {
       const data = {
         ...req.body,
       };
-      console.log(data);
-      console.log(req.file);
 
       // const result = await firebaseService.uploadImage(data.file);
       return res.status(200).send({ message: "pending" });
@@ -185,7 +176,6 @@ class UserController {
       const data = {
         ...req.body,
       };
-      console.log(data);
 
       const fullData = await firebaseService.getAllData("/account");
       const arr = [];
@@ -207,9 +197,6 @@ class UserController {
         )
           ans.push(i);
       }
-      console.log(ans);
-
-      // console.log(fullData);
       return res.status(200).send(ans);
     } catch (error) {
       console.log(error);
@@ -221,7 +208,6 @@ class UserController {
       const data = {
         ...req.body,
       };
-      console.log(data);
 
       const respone = await firebaseService.updateProfile(data);
       return res.status(200).send({ message: respone });

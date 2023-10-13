@@ -14,7 +14,7 @@ type NotificationType = "success" | "error";
 
 const Login = () => {
   const [isLogin, setIsLogin] = useState(false);
-
+  const [isNavigate, setIsNavigate] = useState(false);
   const onFinish = (values: any) => {
     const data: LoginFormData = {
       username: values.username,
@@ -50,8 +50,8 @@ const Login = () => {
   const onFinishFailed = (errorInfo: any) => {
     // console.log("Failed:", errorInfo);
   };
-
-  return isLogin == true ? (
+  if (isNavigate) return <Navigate to="/register" />;
+  return isLogin ? (
     <Navigate to="/message" />
   ) : (
     <Style>
@@ -106,13 +106,16 @@ const Login = () => {
             <Divider style={{ borderColor: "white", color: "white" }}>
               or
             </Divider>
-            <a href="/register">
-              <Button
-                content="Register"
-                type="primary"
-                className="btn-register"
-              />
-            </a>
+            {/* <a href="/register"> */}
+            <Button
+              content="Register"
+              type="primary"
+              className="btn-register"
+              onClick={() => {
+                setIsNavigate(true);
+              }}
+            />
+            {/* </a> */}
           </Form.Item>
         </Form>
       </div>

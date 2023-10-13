@@ -262,13 +262,13 @@ export class FirebaseService {
     if (data) {
       let tmp = data[Object.keys(data)[0]].message;
       return tmp;
-      let arr = [];
-      let keys = Object.keys(tmp);
-      for (let i of keys) {
-        arr.push(tmp[i]);
-      }
-      arr.pop();
-      return arr;
+      // let arr = [];
+      // let keys = Object.keys(tmp);
+      // for (let i of keys) {
+      //   arr.push(tmp[i]);
+      // }
+      // arr.pop();
+      // return arr;
     }
     return undefined;
   }

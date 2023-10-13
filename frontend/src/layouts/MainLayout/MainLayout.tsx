@@ -11,7 +11,11 @@ import { Navigate, useParams } from "react-router-dom";
 import Firebase from "../../configs/firebaseConfig";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../../hooks/redux/store";
-import { ADD, DELETE, addBox } from "../../hooks/redux/boxes/boxesActions";
+import {
+  TADD_BOX,
+  TDELETE_BOX,
+  addBox,
+} from "../../hooks/redux/boxes/boxesActions";
 import { Dispatch } from "redux";
 
 const user = new User();
@@ -21,7 +25,7 @@ const user = new User();
 const MainLayout: React.FC<LayoutProps> = ({ children }) => {
   const [isLoading, setIsLoading] = useState(true);
   const { boxes } = useSelector((state: RootState) => state.boxes);
-  const dispatch = useDispatch<Dispatch<ADD | DELETE>>();
+  const dispatch = useDispatch<Dispatch<TADD_BOX | TDELETE_BOX>>();
   const { message } = useParams<{ message: string }>();
 
   useEffect(() => {
@@ -36,7 +40,6 @@ const MainLayout: React.FC<LayoutProps> = ({ children }) => {
           const box: infoBoxChat = await client.getInfoBoxChat(i);
           dispatch(addBox(box));
         }
-        // console.log(boxes);
       } catch (err) {
         console.log("Error: " + err);
         throw err;

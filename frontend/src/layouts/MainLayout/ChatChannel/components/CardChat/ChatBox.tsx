@@ -4,8 +4,10 @@ import Style from "./style";
 import clsx from "clsx";
 
 const ChatBox = ({ box }: { box: infoBoxChat }) => {
-  const nav = "/message/" + box.id;
+  // console.log("123 ", box);
   const { message } = useParams();
+  if (!box) return <div>Loading...</div>;
+  const nav = "/message/" + box.id;
   const classActive = clsx("d-flex justify-content-center align-items-center", {
     ["active"]: message == box.id,
   });
